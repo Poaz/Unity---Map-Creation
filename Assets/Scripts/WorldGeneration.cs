@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEditor;
+
 
 public class WorldGeneration : Singleton<WorldGeneration>
 {
-
-
     public GameObject pixPrefab;
     public Texture2D inputMap;
     public Texture2D ColorInputMap;
@@ -26,14 +26,16 @@ public class WorldGeneration : Singleton<WorldGeneration>
     public List<GameObject> parentsDirt;
     public List<GameObject> parentsWater;
     public List<GameObject> parentsDesert;
+    public GameObject[] Grass;
+    public GameObject[] trees;
+    public GameObject[] Cactus;
+    public GameObject[] WaterPlants;
     int ColorSpreadGreen = 30;
     int ColorSpreadBlue = 42;
     int ColorSpreadYellow = 40;
-    public GameObject[] Grass;
     Color LookingForGreen = new Color(110f / 255, 170f / 255, 120f  / 255);
     Color LookingForBlue =  new Color(110f / 255, 150f / 255, 210f / 255);
     Color LookingForYellow = new Color(200f / 255, 180f / 255, 70f / 255);
-
 
     void Start()
     {
@@ -73,7 +75,6 @@ public class WorldGeneration : Singleton<WorldGeneration>
 
             }
         }
-        Debug.Log("Spawning pixels..."); //
         for (int w = 0; w < theWidth; w++)
         {
             for (int h = 0; h < theHeight; h++)
@@ -81,23 +82,60 @@ public class WorldGeneration : Singleton<WorldGeneration>
                 if (spawn[w, h] == 3) //Here it the spawn arrays is true at that position.
                 {
                     image[w, h] = (GameObject)Instantiate(pixPrefab, new Vector3(10.5f - w, 0, 10.5f - h), Quaternion.identity);
-                    int tmp_int = (int)UnityEngine.Random.Range(1, 50);
+                    int tmp_int = (int)UnityEngine.Random.Range(1, 10);
                     if (tmp_int == 5)
                     {
                         int whatGrass = 0;//(int)UnityEngine.Random.Range(1, 1);
                         GameObject tmp_object = Grass[whatGrass];
+                        tmp_object.transform.position = new Vector3((float)UnityEngine.Random.Range(0, 21) - w, 0.5f, (float)UnityEngine.Random.Range(0, 21) - h);
+                        tmp_object.transform.Rotate(0, 20, 0);
+                        Instantiate(tmp_object);
+                    }
+                }
+
+
+                if(spawn[w,h] == 2)
+                {
+                    image[w, h] = (GameObject)Instantiate(pixPrefab, new Vector3(10.5f - w, 0, 10.5f - h), Quaternion.identity);
+                    int tmp_int = (int)UnityEngine.Random.Range(0, 10);
+                    if (tmp_int == 5)
+                    {
+                        int whatTree = (int)UnityEngine.Random.Range(0, 17);
+                        GameObject tmp_object = trees[whatTree];
                         tmp_object.transform.position = new Vector3(10.5f - w, 0.5f, 10.5f - h);
                         Instantiate(tmp_object);
                     }
                 }
 
-                if (spawn[w, h] == 2 || spawn[w, h] == 1 || spawn[w, h] == 0) //Here it the spawn arrays is true at that position.
+                if (spawn[w, h] == 1)
                 {
                     image[w, h] = (GameObject)Instantiate(pixPrefab, new Vector3(10.5f - w, 0, 10.5f - h), Quaternion.identity);
+                    int tmp_int = (int)UnityEngine.Random.Range(1, 150);
+                    if (tmp_int == 5)
+                    {
+                        int whatPlants = (int)UnityEngine.Random.Range(0, 7);
+                        GameObject tmp_object = WaterPlants[whatPlants];
+                        tmp_object.transform.position = new Vector3(10.5f - w, 0.5f, 10.5f - h);
+                        Instantiate(tmp_object);
+                    }
+                }
+
+                if(spawn[w,h] == 0)
+                {
+                    image[w, h] = (GameObject)Instantiate(pixPrefab, new Vector3(10.5f - w, 0, 10.5f - h), Quaternion.identity);
+                    int tmp_int = (int)UnityEngine.Random.Range(1, 500);
+                    if (tmp_int == 5)
+                    {
+                        int whatCactus = (int)UnityEngine.Random.Range(0, 14);
+                        GameObject tmp_object = Cactus[whatCactus];
+                        tmp_object.transform.position = new Vector3(10.5f - w, 0, 10.5f - h);
+                        Instantiate(tmp_object);
+                        }
+                    }
                 }
             }
         }
-    }
+    
 
     public void SequentialGrassFire(int x, int y)
     {
@@ -303,7 +341,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
         {
             for (int h = 0; h < i.GetLength(1); h++)
             {
-                if (w < 10 || h < 10 || w > i.GetLength(0) - 10 || h > i.GetLength(1) - 10)
+                if (w < 20 || h < 20 || w > i.GetLength(0) - 20 || h > i.GetLength(1) - 20)
                 {
                     i[w, h].r = 1;
                     i[w, h].g = 1;

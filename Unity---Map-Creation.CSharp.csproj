@@ -107,18 +107,14 @@
     <Compile Include="Assets\Prefabs\Grass\Standard Assets\Effects\ImageEffects\Scripts\Twirl.cs" />
     <Compile Include="Assets\Prefabs\Grass\Standard Assets\Effects\ImageEffects\Scripts\VignetteAndChromaticAberration.cs" />
     <Compile Include="Assets\Prefabs\Grass\Standard Assets\Effects\ImageEffects\Scripts\Vortex.cs" />
-    <Compile Include="Assets\Scripts\CactusGeneration.cs" />
     <Compile Include="Assets\Scripts\Desert.cs" />
     <Compile Include="Assets\Scripts\Dirt.cs" />
     <Compile Include="Assets\Scripts\Follow.cs" />
     <Compile Include="Assets\Scripts\Grass.cs" />
-    <Compile Include="Assets\Scripts\GrassGeneration.cs" />
     <Compile Include="Assets\Scripts\Manager.cs" />
     <Compile Include="Assets\Scripts\Movement.cs" />
     <Compile Include="Assets\Scripts\Singleton.cs" />
-    <Compile Include="Assets\Scripts\TreeGeneration.cs" />
     <Compile Include="Assets\Scripts\Water.cs" />
-    <Compile Include="Assets\Scripts\WaterPlantsGeneration.cs" />
     <Compile Include="Assets\Scripts\WorldGeneration.cs" />
   </ItemGroup>
   <ItemGroup>

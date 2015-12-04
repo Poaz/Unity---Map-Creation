@@ -46,7 +46,7 @@ public class TreeGeneration : Singleton<TreeGeneration> {
     public void GenerateForest() {
         for (int w = 0; w < area.width; w++) {
             for (int h = 0; h < area.height; h++) {
-                if (!DetectColor(image[w, h], ColorWeAreLookingFor, spreadG)) {
+                if (!DetectColor(image[w, h], ColorWeAreLookingFor, 100)) {
                     if (first) {
                         SequentialGrassFire(w, h);
                         first = false;

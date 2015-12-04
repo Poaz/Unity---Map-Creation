@@ -26,9 +26,10 @@ public class WorldGeneration : Singleton<WorldGeneration>
     public List<GameObject> parentsDirt;
     public List<GameObject> parentsWater;
     public List<GameObject> parentsDesert;
-    int ColorSpreadGreen = 35;
+    int ColorSpreadGreen = 30;
     int ColorSpreadBlue = 42;
     int ColorSpreadYellow = 40;
+    public GameObject[] Grass;
     Color LookingForGreen = new Color(110f / 255, 170f / 255, 120f  / 255);
     Color LookingForBlue =  new Color(110f / 255, 150f / 255, 210f / 255);
     Color LookingForYellow = new Color(200f / 255, 180f / 255, 70f / 255);
@@ -77,7 +78,20 @@ public class WorldGeneration : Singleton<WorldGeneration>
         {
             for (int h = 0; h < theHeight; h++)
             {
-                if (spawn[w, h] == 3 || spawn[w, h] == 2 || spawn[w, h] == 1 || spawn[w, h] == 0) //Here it the spawn arrays is true at that position.
+                if (spawn[w, h] == 3) //Here it the spawn arrays is true at that position.
+                {
+                    image[w, h] = (GameObject)Instantiate(pixPrefab, new Vector3(10.5f - w, 0, 10.5f - h), Quaternion.identity);
+                    int tmp_int = (int)UnityEngine.Random.Range(1, 50);
+                    if (tmp_int == 5)
+                    {
+                        int whatGrass = 0;//(int)UnityEngine.Random.Range(1, 1);
+                        GameObject tmp_object = Grass[whatGrass];
+                        tmp_object.transform.position = new Vector3(10.5f - w, 0.5f, 10.5f - h);
+                        Instantiate(tmp_object);
+                    }
+                }
+
+                if (spawn[w, h] == 2 || spawn[w, h] == 1 || spawn[w, h] == 0) //Here it the spawn arrays is true at that position.
                 {
                     image[w, h] = (GameObject)Instantiate(pixPrefab, new Vector3(10.5f - w, 0, 10.5f - h), Quaternion.identity);
                 }
@@ -370,7 +384,6 @@ public class WorldGeneration : Singleton<WorldGeneration>
             for (int w = 0; w < theWidth; w++) {
                 for (int h = 0; h < theHeight; h++){
                     if (spawn[w, h] == 3){
-
                         image[w, h].transform.parent = parentsIsland.ElementAt(parentsUsedisland).transform;
                         countisland++;
                         if ((countisland) / (parentsUsedisland + 1) >= 2000){

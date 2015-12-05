@@ -46,17 +46,13 @@ public class Manager : Singleton<Manager> {
                 break;
             case 2:
                 Follow.Instance.first = false;
-                Follow.Instance.second = true;
-                Follow.Instance.third = false;
+                Follow.Instance.second = false;
+                Follow.Instance.third = true;
                 Movement.Instance.transform.position = new Vector3(-width / 2, 1, -height / 2);
                 break;
             case 3:
                 WorldGeneration.Instance.CallGrassFire();
                 WorldGeneration.Instance.CallCombineMesh(true);
-                TreeGeneration.Instance.CallGenerateForest();
-                CactusGeneration.Instance.CallGenerateCactus();
-                //GrassGeneration.Instance.CallGenerateGrass();
-                WaterPlantsGeneration.Instance.CallGenerateWaterPlants();
                 Follow.Instance.first = false;
                 Follow.Instance.second = false;
                 Follow.Instance.third = true;

@@ -53,9 +53,11 @@ public class WorldGeneration : Singleton<WorldGeneration>
         image = new GameObject[theWidth, theHeight];
         imageValues = GetPixels2D(inputMap);
         ColorimageValues = GetPixels2D(ColorInputMap);
-        //SetPixels2D(imageValues, tex);
-        //this.GetComponent<Renderer>().material.mainTexture = tex;
+        SetPixels2D(imageValues, tex);
+        this.GetComponent<Renderer>().material.mainTexture = tex;
     } //start
+
+
 
     public void InitailizeGrassfire()
     {

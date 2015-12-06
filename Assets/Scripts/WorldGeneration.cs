@@ -104,7 +104,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
                     {
                         int whatGrass = 0;//(int)UnityEngine.Random.Range(1, 1);
                         GameObject tmp_object = Grass[whatGrass];
-                        tmp_object.transform.position = new Vector3((float)UnityEngine.Random.Range(0, 21) - w, 0.5f, (float)UnityEngine.Random.Range(0, 21) - h);
+                        tmp_object.transform.position = new Vector3(10.5f - w, 0.5f, 10.5f - h);
                         tmp_object.transform.Rotate(0, 20, 0);
                         Instantiate(tmp_object);
                     }
@@ -353,6 +353,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
 
     public void CallErosion()
     {
+        resetImage();
         Treshold(imageValues, TresholdAmount);
         imageValues = Erosion(imageValues, ErosionAmount);
         SetPixels2D(imageValues, tex);
@@ -368,6 +369,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
 
     public void CallContrast()
     {
+        resetImage();
         imageValues = Contrast(imageValues, ContrastAmount);
         SetPixels2D(imageValues, tex);
         this.GetComponent<Renderer>().material.mainTexture = tex;
@@ -654,17 +656,14 @@ public class WorldGeneration : Singleton<WorldGeneration>
     {
         ContrastAmount = _ContrastAmount;
     }
-
     public void updateTreshold(float _TresholdAmount)
     {
         TresholdAmount = _TresholdAmount;
     }
-
     public void updateErosion(int _ErosionAmount)
     {
         ErosionAmount = _ErosionAmount;
     }
-
     public void updategreenSpread(int _greenSpread)
     {
         ColorSpreadGreen = _greenSpread;
@@ -681,7 +680,6 @@ public class WorldGeneration : Singleton<WorldGeneration>
     {
         greenB = _greenB;
     }
-
     public void updateblueSpread(int _BlueSpread)
     {
         ColorSpreadBlue = _BlueSpread;
@@ -698,7 +696,6 @@ public class WorldGeneration : Singleton<WorldGeneration>
     {
         blueB = _blueB;
     }
-
     public void updateyellowSpread(int _yellowSpread)
     {
         ColorSpreadYellow = _yellowSpread;

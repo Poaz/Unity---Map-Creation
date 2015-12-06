@@ -8,7 +8,7 @@ public class Manager : Singleton<Manager> {
     [SerializeField] private Button erosion;
     [SerializeField] private Button Reset;
     [SerializeField] private Button generate;
-    [SerializeField] private Button ResetIngame;
+    //[SerializeField] private Button ResetIngame;
     [SerializeField] private Button Respawn;
     public InputField ContrastAmount;
     public InputField ErosionAmount;
@@ -34,7 +34,7 @@ public class Manager : Singleton<Manager> {
         Reset.onClick.AddListener(() => { Navigator(2); });
         generate.onClick.AddListener(() => { Navigator(3); });
         Respawn.onClick.AddListener(() => { Navigator(4); });
-        ResetIngame.onClick.AddListener(() => { Navigator(5); });
+        //ResetIngame.onClick.AddListener(() => { Navigator(5); });
         // combi.onClick.AddListener(() => { Navigator(6); });
 
         ContrastAmount.onEndEdit.AddListener(updateContrast);
@@ -103,7 +103,7 @@ public class Manager : Singleton<Manager> {
                 Movement.Instance.transform.position = new Vector3(-(WorldGeneration.Instance.spawnX), 1, -(WorldGeneration.Instance.spawnZ));
 
                 break;
-            case 5:
+           /* case 5:
                 Follow.Instance.first = true;
                 Follow.Instance.second = false;
                 Follow.Instance.third = false;
@@ -112,7 +112,7 @@ public class Manager : Singleton<Manager> {
                 currentContrastAmount = 1.0f;
                 currentTresholdAmount = 0.4f;
                 break;
-           /* case 6:
+            case 6:
                 Debug.Log("Combing meshes");
 
                 break;*/

@@ -573,25 +573,16 @@ public class WorldGeneration : Singleton<WorldGeneration>
     public void updateContrast(float _ContrastAmount)
     {
         ContrastAmount = _ContrastAmount;
-        Debug.Log(ContrastAmount);
-        Debug.Log(ErosionAmount);
-        Debug.Log(TresholdAmount);
     }
 
     public void updateTreshold(float _TresholdAmount)
     {
         TresholdAmount = _TresholdAmount;
-        Debug.Log(ContrastAmount);
-        Debug.Log(ErosionAmount);
-        Debug.Log(TresholdAmount);
     }
 
     public void updateErosion(int _ErosionAmount)
     {
         ErosionAmount = _ErosionAmount;
-        Debug.Log(ContrastAmount);
-        Debug.Log(ErosionAmount);
-        Debug.Log(TresholdAmount);
     }
 
 }

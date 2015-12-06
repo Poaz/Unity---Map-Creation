@@ -50,7 +50,7 @@ public class Follow : Singleton<Follow>
 
         if (first)
         {
-            transform.position = new Vector3(0, 10, 0);
+            transform.position = new Vector3(0, 15, 0);
         }
         else if (second)
         {
@@ -59,7 +59,7 @@ public class Follow : Singleton<Follow>
         else if (third)
         {
             transform.position = new Vector3(target.transform.position.x, target.transform.position.y, target.transform.position.z) + offset;
-            transform.rotation = Quaternion.Euler(30, 0, 0);
+            transform.rotation = Quaternion.Euler(22, 180, 4);
 
             if (target)
             {

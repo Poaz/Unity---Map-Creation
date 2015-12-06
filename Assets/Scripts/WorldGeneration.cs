@@ -9,13 +9,16 @@ using UnityEditor;
 public class WorldGeneration : Singleton<WorldGeneration>
 {
     public GameObject pixPrefab;
+    public GameObject showingcolour;
     public Texture2D inputMap;
     public Texture2D ColorInputMap;
     private Texture2D tex;
+    private Texture2D tex2;
     private Color[,] imageValues;
     private Color[,] ColorimageValues;
     private int[] counter = new int[2];
     GameObject[,] image;
+    GameObject[,] image2;
     List<Coords> labels;
     private bool first = true;
     private int[,] spawn;
@@ -38,16 +41,38 @@ public class WorldGeneration : Singleton<WorldGeneration>
     int ColorSpreadBlue = 42;
     int ColorSpreadYellow = 40;
     int ColorSpreadRed = 40;
-    Color LookingForGreen = new Color(110f / 255, 170f / 255, 120f  / 255);
-    Color LookingForBlue =  new Color(110f / 255, 150f / 255, 210f / 255);
-    Color LookingForYellow = new Color(200f / 255, 180f / 255, 70f / 255);
+
+    float greenR = 110;
+    float greenG = 170;
+    float greenB = 120;
+
+    float blueR = 110;
+    float blueG = 150;
+    float blueB = 210;
+
+    float yellowR = 200;
+    float yellowG = 180;
+    float yellowB = 70;
+
+
+    Color LookingForGreen;
+    Color LookingForBlue;
+    Color LookingForYellow; 
     Color LookingForRed = new Color(215f / 255, 90f / 255, 85f / 255);
     public int spawnX, spawnZ;
 
     void Start()
     {
+        parentsIsland = new List<GameObject>();
+        parentsDirt = new List<GameObject>();
+        parentsWater = new List<GameObject>();
+        parentsDesert = new List<GameObject>();
+        labels = new List<Coords>();
+
         resetImage();
+        resetColorImage();
         FindSpawnPoint();
+
     } //start
 
     public void InitailizeGrassfire()
@@ -319,7 +344,6 @@ public class WorldGeneration : Singleton<WorldGeneration>
         }
     }
 
-
     public void Callwhiteborder()
     {
         imageValues = whiteborder(imageValues);
@@ -352,6 +376,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
     public void CallGrassFire()
     {
         resetImage();
+        resetColorImage();
         Treshold(imageValues, TresholdAmount);
         imageValues = Erosion(imageValues, ErosionAmount);
         imageValues = Contrast(imageValues, ContrastAmount);
@@ -361,6 +386,54 @@ public class WorldGeneration : Singleton<WorldGeneration>
         this.GetComponent<Renderer>().material.mainTexture = tex;
     }
 
+    public void CallLookForColors()
+    {
+        resetColorImage();
+        ColorimageValues = LookForColors(ColorimageValues);
+        SetPixels2D(ColorimageValues, tex2);
+        showingcolour.GetComponent<Renderer>().material.mainTexture = tex2;
+    }
+
+    public Color[,] LookForColors(Color[,] i)
+    {
+        for (int w = 0; w < theWidth; w++)
+        {
+            for (int h = 0; h < theHeight; h++)
+            {
+                if (DetectColor(ColorimageValues[w, h], LookingForBlue, ColorSpreadBlue))
+                {
+                    i[w, h].r = 0;
+                    i[w, h].g = 0;
+                    i[w, h].b = 255;
+                }
+                else if (DetectColor(ColorimageValues[w, h], LookingForGreen, ColorSpreadGreen))
+                {
+                    i[w, h].r = 0;
+                    i[w, h].g = 255;
+                    i[w, h].b = 0;
+                }
+                else if (DetectColor(ColorimageValues[w, h], LookingForYellow, ColorSpreadYellow))
+                {
+                    i[w, h].r = 255;
+                    i[w, h].g = 255;
+                    i[w, h].b = 0;
+                }
+                else if (DetectColor(ColorimageValues[w, h], LookingForRed, ColorSpreadRed))
+                {
+                    i[w, h].r = 255;
+                    i[w, h].g = 0;
+                    i[w, h].b = 0;
+                }
+                else{
+                        i[w, h].r = 255;
+                        i[w, h].g = 255;
+                        i[w, h].b = 255;
+                }
+            }
+        }
+        return i;
+
+    }
 
     public Color[,] Treshold(Color[,] i, float t)
     {
@@ -551,23 +624,30 @@ public class WorldGeneration : Singleton<WorldGeneration>
 
     public void resetImage()
     {
+        //erosion picture
         inputMap = Resources.Load("map") as Texture2D;
-        ColorInputMap = Resources.Load("map") as Texture2D;
-        parentsIsland = new List<GameObject>();
-        parentsDirt = new List<GameObject>();
-        parentsWater = new List<GameObject>();
-        parentsDesert = new List<GameObject>();
         theWidth = inputMap.width;
         theHeight = inputMap.height;
         tex = new Texture2D(theWidth, theHeight);
-        labels = new List<Coords>();
         spawn = new int[theWidth, theHeight];
         image = new GameObject[theWidth, theHeight];
         imageValues = GetPixels2D(inputMap);
-        ColorimageValues = GetPixels2D(ColorInputMap);
         SetPixels2D(imageValues, tex);
         this.GetComponent<Renderer>().material.mainTexture = tex;
+    }
 
+    public void resetColorImage()
+    {
+        //colour picture
+        ColorInputMap = Resources.Load("map") as Texture2D;
+        image2 = new GameObject[theWidth, theHeight];
+        tex2 = new Texture2D(theWidth, theHeight);
+        ColorimageValues = GetPixels2D(ColorInputMap);
+        SetPixels2D(ColorimageValues, tex2);
+        showingcolour.GetComponent<Renderer>().material.mainTexture = tex2;
+        LookingForGreen = new Color(greenR / 255, greenG / 255, greenB / 255);
+        LookingForBlue = new Color(blueR / 255, blueG / 255, blueB / 255);
+        LookingForYellow = new Color(yellowR / 255, yellowG / 255, yellowB / 255);
     }
 
     public void updateContrast(float _ContrastAmount)
@@ -585,10 +665,57 @@ public class WorldGeneration : Singleton<WorldGeneration>
         ErosionAmount = _ErosionAmount;
     }
 
+    public void updategreenSpread(int _greenSpread)
+    {
+        ColorSpreadGreen = _greenSpread;
+    }
+    public void updategreenR(float _greenR)
+    {
+        greenR = _greenR;
+    }
+    public void updategreenG(float _greenG)
+    {
+        greenG = _greenG;
+    }
+    public void updategreenB(float _greenB)
+    {
+        greenB = _greenB;
+    }
+
+    public void updateblueSpread(int _BlueSpread)
+    {
+        ColorSpreadBlue = _BlueSpread;
+    }
+    public void updateblueR(float _blueR)
+    {
+        blueR = _blueR;
+    }
+    public void updateblueG(float _blueG)
+    {
+        blueG = _blueG;
+    }
+    public void updateblueB(float _blueB)
+    {
+        blueB = _blueB;
+    }
+
+    public void updateyellowSpread(int _yellowSpread)
+    {
+        ColorSpreadYellow = _yellowSpread;
+    }
+    public void updateyellowR(float _yellowR)
+    {
+        yellowR = _yellowR;
+    }
+    public void updateyellowG(float _yellowG)
+    {
+        yellowG = _yellowG;
+    }
+    public void updateyellowB(float _yellowB)
+    {
+        yellowB = _yellowB;
+    }
 }
-
-
-
 
 public class Coords
 {

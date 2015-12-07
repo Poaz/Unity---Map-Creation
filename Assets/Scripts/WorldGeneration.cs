@@ -9,13 +9,16 @@ using UnityEditor;
 public class WorldGeneration : Singleton<WorldGeneration>
 {
     public GameObject pixPrefab;
+    public GameObject showingcolour;
     public Texture2D inputMap;
     public Texture2D ColorInputMap;
     private Texture2D tex;
+    private Texture2D tex2;
     private Color[,] imageValues;
     private Color[,] ColorimageValues;
     private int[] counter = new int[2];
     GameObject[,] image;
+    GameObject[,] image2;
     List<Coords> labels;
     private bool first = true;
     private int[,] spawn;
@@ -30,31 +33,46 @@ public class WorldGeneration : Singleton<WorldGeneration>
     public GameObject[] trees;
     public GameObject[] Cactus;
     public GameObject[] WaterPlants;
+    public int ErosionAmount = 3;
+    public float ContrastAmount = 1.0f;
+    public float TresholdAmount = 0.4f;
+
     int ColorSpreadGreen = 30;
     int ColorSpreadBlue = 42;
     int ColorSpreadYellow = 40;
-    Color LookingForGreen = new Color(110f / 255, 170f / 255, 120f  / 255);
-    Color LookingForBlue =  new Color(110f / 255, 150f / 255, 210f / 255);
-    Color LookingForYellow = new Color(200f / 255, 180f / 255, 70f / 255);
+    int ColorSpreadRed = 40;
+
+    float greenR = 110;
+    float greenG = 170;
+    float greenB = 120;
+
+    float blueR = 110;
+    float blueG = 150;
+    float blueB = 210;
+
+    float yellowR = 200;
+    float yellowG = 180;
+    float yellowB = 70;
+
+
+    Color LookingForGreen;
+    Color LookingForBlue;
+    Color LookingForYellow; 
+    Color LookingForRed = new Color(215f / 255, 90f / 255, 85f / 255);
+    public int spawnX, spawnZ;
 
     void Start()
     {
-        inputMap = Resources.Load("map") as Texture2D;
-        ColorInputMap = Resources.Load("map") as Texture2D;
         parentsIsland = new List<GameObject>();
         parentsDirt = new List<GameObject>();
         parentsWater = new List<GameObject>();
         parentsDesert = new List<GameObject>();
-        theWidth = inputMap.width;
-        theHeight = inputMap.height;
-        tex = new Texture2D(theWidth, theHeight);
         labels = new List<Coords>();
-        spawn = new int[theWidth, theHeight];
-        image = new GameObject[theWidth, theHeight];
-        imageValues = GetPixels2D(inputMap);
-        ColorimageValues = GetPixels2D(ColorInputMap);
-        //SetPixels2D(imageValues, tex);
-        //this.GetComponent<Renderer>().material.mainTexture = tex;
+
+        resetImage();
+        resetColorImage();
+        FindSpawnPoint();
+
     } //start
 
     public void InitailizeGrassfire()
@@ -69,12 +87,11 @@ public class WorldGeneration : Singleton<WorldGeneration>
                     SequentialGrassFire3(w, h);
                     SequentialGrassFire2(w, h);
                     SequentialGrassFire(w, h); //Runs the grassfire function on the first white cube. 
-
                     first = false; //So it only runs the grassfire function once. 
                 }
-
             }
         }
+
         for (int w = 0; w < theWidth; w++)
         {
             for (int h = 0; h < theHeight; h++)
@@ -87,12 +104,11 @@ public class WorldGeneration : Singleton<WorldGeneration>
                     {
                         int whatGrass = 0;//(int)UnityEngine.Random.Range(1, 1);
                         GameObject tmp_object = Grass[whatGrass];
-                        tmp_object.transform.position = new Vector3((float)UnityEngine.Random.Range(0, 21) - w, 0.5f, (float)UnityEngine.Random.Range(0, 21) - h);
+                        tmp_object.transform.position = new Vector3(10.5f - w, 0.5f, 10.5f - h);
                         tmp_object.transform.Rotate(0, 20, 0);
                         Instantiate(tmp_object);
                     }
                 }
-
 
                 if(spawn[w,h] == 2)
                 {
@@ -136,7 +152,6 @@ public class WorldGeneration : Singleton<WorldGeneration>
             }
         }
     
-
     public void SequentialGrassFire(int x, int y)
     {
         int h;
@@ -198,6 +213,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
             }
         }
     }
+
     public void SequentialGrassFire3(int x, int y)
     {
         int h;
@@ -224,7 +240,6 @@ public class WorldGeneration : Singleton<WorldGeneration>
             else
             {
                 labels.RemoveAt(0);
-
             }
         }
     }
@@ -260,181 +275,37 @@ public class WorldGeneration : Singleton<WorldGeneration>
         }
     }
 
-
-    public Color[,] GetPixels2D(Texture2D t)
+    public void CallCombineMesh(bool callmemaybe)
     {
-        Color[,] texture2d = new Color[t.width, t.height];
-        Color[] texture1d = t.GetPixels();
-
-        for (int h = 0; h < t.height; h++)
+        if (callmemaybe)
         {
-            for (int w = 0; w < t.width; w++)
-            {
-                texture2d[w, h] = texture1d[h * t.width + w];
-            }
-        }
-        return texture2d;
-    }
-
-    public void SetPixels2D(Color[,] i, Texture2D t)
-    {
-        Color[] texture1d = new Color[i.Length];
-
-        int width = i.GetLength(0);
-        int height = i.GetLength(1);
-
-        for (int h = 0; h < height; h++)
-        {
-            for (int w = 0; w < width; w++)
-            {
-                texture1d[h * width + w] = i[w, h];
-            }
-        }
-        t.SetPixels(texture1d);
-        t.Apply();
-    }
-
-    public Color[,] Erosion(Color[,] i, int k)
-    {
-        //set source image to grayscale
-        i = Treshold(i, 0.4f);
-
-        Color[,] result = new Color[i.GetLength(0), i.GetLength(1)];
-
-        for (int w = 0 + k; w < i.GetLength(0) - k; w++)
-        {
-            for (int h = 0 + k; h < i.GetLength(1) - k; h++)
-            {
-                float sum = 0f;
-                for (int j = -k / 2; j <= +k / 2; j++)
-                {
-                    for (int l = -k / 2; l <= +k / 2; l++)
-                    {
-                        sum += i[w + j, h + l].r;
-                    }
-                }
-
-                if (w + k < 10 || h + k < 10 || w > (i.GetLength(0) - (k + 10)) || h > (i.GetLength(1) - (k + 10)))
-                {
-                    result[w, h].r = 1;
-                    result[w, h].g = 1;
-                    result[w, h].b = 1;
-                }
-                else
-                {
-                    float res = sum < k * k ? 0f : 1f;
-                    result[w, h].r = res;
-                    result[w, h].g = res;
-                    result[w, h].b = res;
-                }
-            }
-        }
-        //Callwhiteborder();
-        return result;
-    }
-
-    public Color[,] whiteborder(Color[,] i)
-    {
-        //i = Treshold(i, 0.5f);
-        Color[,] result2 = new Color[i.GetLength(0), i.GetLength(1)];
-        for (int w = 0; w < i.GetLength(0); w++)
-        {
-            for (int h = 0; h < i.GetLength(1); h++)
-            {
-                if (w < 20 || h < 20 || w > i.GetLength(0) - 20 || h > i.GetLength(1) - 20)
-                {
-                    i[w, h].r = 1;
-                    i[w, h].g = 1;
-                    i[w, h].b = 1;
-                }
-            }
-        }
-        return i;
-    }
-
-    public void Callwhiteborder()
-    {
-        imageValues = whiteborder(imageValues);
-        SetPixels2D(imageValues, tex);
-        this.GetComponent<Renderer>().material.mainTexture = tex;
-    }
-
-    public void CallErosion()
-    {
-        imageValues = Erosion(imageValues, 3);
-        SetPixels2D(imageValues, tex);
-        this.GetComponent<Renderer>().material.mainTexture = tex;
-    }
-
-    public void CallRGB2Grayscale()
-    {
-        imageValues = Rgb2Grayscale(imageValues);
-        SetPixels2D(imageValues, tex);
-        this.GetComponent<Renderer>().material.mainTexture = tex;
-    }
-
-    public void CallContrast()
-    {
-        imageValues = Contrast(imageValues, 1.1f);
-        SetPixels2D(imageValues, tex);
-        this.GetComponent<Renderer>().material.mainTexture = tex;
-    }
-
-    public void CallGrassFire()
-    {
-        InitailizeGrassfire();
-        //SetPixels2D(imageValues, tex);
-        this.GetComponent<Renderer>().material.mainTexture = tex;
-    }
-
-    public Color[,] Treshold(Color[,] i, float t)
-    {
-        for (int w = 0; w < i.GetLength(0); w++)
-        {
-            for (int h = 0; h < i.GetLength(1); h++)
-            {
-                float bw = (i[w, h].r + i[w, h].g + i[w, h].b) / 3;
-                bw = bw < t ? 0f : 1f;
-                i[w, h].r = bw;
-                i[w, h].g = bw;
-                i[w, h].b = bw;
-            }
-        }
-        return i;
-    }
-
-    private void deleteMeshes() {
-        for (int y = 0; y < image.GetLength(0); y++) {
-            for (int x = 0; x < image.GetLength(1); x++){
-                Destroy(image[y, x]);
-            }
-        }
-    }
-
-    public void CallCombineMesh(bool callmemaybe) {
-        if (callmemaybe){
             int countisland = 0, counttree = 0, countWater = 0, countDesert = 0;
             int parentsUsedisland = 0, parentsUsedDirt = 0, parentsUsedWater = 0, parentsUsedDesert = 0;
             parentsIsland.Add(new GameObject("Grassland"));
             parentsDirt.Add(new GameObject("Dirt"));
             parentsWater.Add(new GameObject("Water"));
             parentsDesert.Add(new GameObject("Desert"));
-            for (int w = 0; w < theWidth; w++) {
-                for (int h = 0; h < theHeight; h++){
-                    if (spawn[w, h] == 3){
+            for (int w = 0; w < theWidth; w++)
+            {
+                for (int h = 0; h < theHeight; h++)
+                {
+                    if (spawn[w, h] == 3)
+                    {
                         image[w, h].transform.parent = parentsIsland.ElementAt(parentsUsedisland).transform;
                         countisland++;
-                        if ((countisland) / (parentsUsedisland + 1) >= 2000){
+                        if ((countisland) / (parentsUsedisland + 1) >= 2000)
+                        {
                             parentsIsland.ElementAt(parentsUsedisland).AddComponent<Grass>();
                             parentsUsedisland++;
                             parentsIsland.Add(new GameObject("Grassland"));
                         }
                     }
-                   if (spawn[w, h] == 2)
+                    if (spawn[w, h] == 2)
                     {
                         image[w, h].transform.parent = parentsDirt.ElementAt(parentsUsedDirt).transform;
                         counttree++;
-                        if ((counttree) / (parentsUsedDirt + 1) >= 2000){
+                        if ((counttree) / (parentsUsedDirt + 1) >= 2000)
+                        {
                             parentsDirt.ElementAt(parentsUsedDirt).AddComponent<Dirt>();
                             parentsUsedDirt++;
                             parentsDirt.Add(new GameObject("Dirt"));
@@ -473,6 +344,115 @@ public class WorldGeneration : Singleton<WorldGeneration>
         }
     }
 
+    public void Callwhiteborder()
+    {
+        imageValues = whiteborder(imageValues);
+        SetPixels2D(imageValues, tex);
+        this.GetComponent<Renderer>().material.mainTexture = tex;
+    }
+
+    public void CallErosion()
+    {
+        resetImage();
+        Treshold(imageValues, TresholdAmount);
+        imageValues = Erosion(imageValues, ErosionAmount);
+        SetPixels2D(imageValues, tex);
+        this.GetComponent<Renderer>().material.mainTexture = tex;
+    }
+
+    public void CallRGB2Grayscale()
+    {
+        imageValues = Rgb2Grayscale(imageValues);
+        SetPixels2D(imageValues, tex);
+        this.GetComponent<Renderer>().material.mainTexture = tex;
+    }
+
+    public void CallContrast()
+    {
+        resetImage();
+        imageValues = Contrast(imageValues, ContrastAmount);
+        SetPixels2D(imageValues, tex);
+        this.GetComponent<Renderer>().material.mainTexture = tex;
+    }
+
+    public void CallGrassFire()
+    {
+        resetImage();
+        resetColorImage();
+        Treshold(imageValues, TresholdAmount);
+        imageValues = Erosion(imageValues, ErosionAmount);
+        imageValues = Contrast(imageValues, ContrastAmount);
+        imageValues = whiteborder(imageValues);
+        InitailizeGrassfire();
+        SetPixels2D(imageValues, tex);
+        this.GetComponent<Renderer>().material.mainTexture = tex;
+    }
+
+    public void CallLookForColors()
+    {
+        resetColorImage();
+        ColorimageValues = LookForColors(ColorimageValues);
+        SetPixels2D(ColorimageValues, tex2);
+        showingcolour.GetComponent<Renderer>().material.mainTexture = tex2;
+    }
+
+    public Color[,] LookForColors(Color[,] i)
+    {
+        for (int w = 0; w < theWidth; w++)
+        {
+            for (int h = 0; h < theHeight; h++)
+            {
+                if (DetectColor(ColorimageValues[w, h], LookingForBlue, ColorSpreadBlue))
+                {
+                    i[w, h].r = 0;
+                    i[w, h].g = 0;
+                    i[w, h].b = 255;
+                }
+                else if (DetectColor(ColorimageValues[w, h], LookingForGreen, ColorSpreadGreen))
+                {
+                    i[w, h].r = 0;
+                    i[w, h].g = 255;
+                    i[w, h].b = 0;
+                }
+                else if (DetectColor(ColorimageValues[w, h], LookingForYellow, ColorSpreadYellow))
+                {
+                    i[w, h].r = 255;
+                    i[w, h].g = 255;
+                    i[w, h].b = 0;
+                }
+                else if (DetectColor(ColorimageValues[w, h], LookingForRed, ColorSpreadRed))
+                {
+                    i[w, h].r = 255;
+                    i[w, h].g = 0;
+                    i[w, h].b = 0;
+                }
+                else{
+                        i[w, h].r = 255;
+                        i[w, h].g = 255;
+                        i[w, h].b = 255;
+                }
+            }
+        }
+        return i;
+
+    }
+
+    public Color[,] Treshold(Color[,] i, float t)
+    {
+        for (int w = 0; w < i.GetLength(0); w++)
+        {
+            for (int h = 0; h < i.GetLength(1); h++)
+            {
+                float bw = (i[w, h].r + i[w, h].g + i[w, h].b) / 3;
+                bw = bw < t ? 0f : 1f;
+                i[w, h].r = bw;
+                i[w, h].g = bw;
+                i[w, h].b = bw;
+            }
+        }
+        return i;
+    }
+
     public Color[,] Rgb2Grayscale(Color[,] i)
     {
         for (int w = 0; w < i.GetLength(0); w++)
@@ -490,7 +470,6 @@ public class WorldGeneration : Singleton<WorldGeneration>
 
     public Color[,] Contrast(Color[,] i, float a)
     {
-        // i = Treshold(i, 0.5f);
         for (int w = 0; w < i.GetLength(0); w++)
         {
             for (int h = 0; h < i.GetLength(1); h++)
@@ -501,6 +480,97 @@ public class WorldGeneration : Singleton<WorldGeneration>
             }
         }
         return i;
+    }
+
+    public Color[,] whiteborder(Color[,] i)
+    {
+        //i = Treshold(i, 0.5f);
+        Color[,] result2 = new Color[i.GetLength(0), i.GetLength(1)];
+        for (int w = 0; w < i.GetLength(0); w++)
+        {
+            for (int h = 0; h < i.GetLength(1); h++)
+            {
+                if (w < 20 || h < 20 || w > i.GetLength(0) - 20 || h > i.GetLength(1) - 20)
+                {
+                    i[w, h].r = 1;
+                    i[w, h].g = 1;
+                    i[w, h].b = 1;
+                }
+            }
+        }
+        return i;
+    }
+
+    public Color[,] Erosion(Color[,] i, int k)
+    {
+        //set source image to grayscale
+
+        Color[,] result = new Color[i.GetLength(0), i.GetLength(1)];
+
+        for (int w = 0 + k; w < i.GetLength(0) - k; w++)
+        {
+            for (int h = 0 + k; h < i.GetLength(1) - k; h++)
+            {
+                float sum = 0f;
+                for (int j = -k / 2; j <= +k / 2; j++)
+                {
+                    for (int l = -k / 2; l <= +k / 2; l++)
+                    {
+                        sum += i[w + j, h + l].r;
+                    }
+                }
+
+                if (w + k < 10 || h + k < 10 || w > (i.GetLength(0) - (k + 10)) || h > (i.GetLength(1) - (k + 10)))
+                {
+                    result[w, h].r = 1;
+                    result[w, h].g = 1;
+                    result[w, h].b = 1;
+                }
+                else
+                {
+                    float res = sum < k * k ? 0f : 1f;
+                    result[w, h].r = res;
+                    result[w, h].g = res;
+                    result[w, h].b = res;
+                }
+            }
+        }
+        //Callwhiteborder();
+        return result;
+    }
+
+    public Color[,] GetPixels2D(Texture2D t)
+    {
+        Color[,] texture2d = new Color[t.width, t.height];
+        Color[] texture1d = t.GetPixels();
+
+        for (int h = 0; h < t.height; h++)
+        {
+            for (int w = 0; w < t.width; w++)
+            {
+                texture2d[w, h] = texture1d[h * t.width + w];
+            }
+        }
+        return texture2d;
+    }
+
+
+    public void SetPixels2D(Color[,] i, Texture2D t)
+    {
+        Color[] texture1d = new Color[i.Length];
+
+        int width = i.GetLength(0);
+        int height = i.GetLength(1);
+
+        for (int h = 0; h < height; h++)
+        {
+            for (int w = 0; w < width; w++)
+            {
+                texture1d[h * width + w] = i[w, h];
+            }
+        }
+        t.SetPixels(texture1d);
+        t.Apply();
     }
 
     public bool DetectColor(Color i, Color targetColor, int spread)
@@ -519,6 +589,128 @@ public class WorldGeneration : Singleton<WorldGeneration>
 
         }
         return tmp_bool;
+    }
+
+    public void FindSpawnPoint()
+    {
+        int found = 0;
+        for (int w = 0; w < theWidth; w++)
+        {
+            for (int h = 0; h < theHeight; h++)
+            {
+                if (DetectColor(ColorimageValues[w, h], LookingForRed, ColorSpreadRed))
+                {
+                    found++;
+                    spawnX = spawnX + w;
+                    spawnZ = spawnZ + h;
+                    Debug.Log("spawnpoint = " + spawnX + " , " + spawnZ);
+                }
+            }
+        }
+        spawnX = spawnX / found;
+        spawnZ = spawnZ / found;
+
+
+    }
+
+    private void deleteMeshes()
+    {
+        for (int y = 0; y < image.GetLength(0); y++)
+        {
+            for (int x = 0; x < image.GetLength(1); x++)
+            {
+                Destroy(image[y, x]);
+            }
+        }
+    }
+
+    public void resetImage()
+    {
+        //erosion picture
+        inputMap = Resources.Load("map") as Texture2D;
+        theWidth = inputMap.width;
+        theHeight = inputMap.height;
+        tex = new Texture2D(theWidth, theHeight);
+        spawn = new int[theWidth, theHeight];
+        image = new GameObject[theWidth, theHeight];
+        imageValues = GetPixels2D(inputMap);
+        SetPixels2D(imageValues, tex);
+        this.GetComponent<Renderer>().material.mainTexture = tex;
+    }
+
+    public void resetColorImage()
+    {
+        //colour picture
+        ColorInputMap = Resources.Load("map") as Texture2D;
+        image2 = new GameObject[theWidth, theHeight];
+        tex2 = new Texture2D(theWidth, theHeight);
+        ColorimageValues = GetPixels2D(ColorInputMap);
+        SetPixels2D(ColorimageValues, tex2);
+        showingcolour.GetComponent<Renderer>().material.mainTexture = tex2;
+        LookingForGreen = new Color(greenR / 255, greenG / 255, greenB / 255);
+        LookingForBlue = new Color(blueR / 255, blueG / 255, blueB / 255);
+        LookingForYellow = new Color(yellowR / 255, yellowG / 255, yellowB / 255);
+    }
+
+    public void updateContrast(float _ContrastAmount)
+    {
+        ContrastAmount = _ContrastAmount;
+    }
+    public void updateTreshold(float _TresholdAmount)
+    {
+        TresholdAmount = _TresholdAmount;
+    }
+    public void updateErosion(int _ErosionAmount)
+    {
+        ErosionAmount = _ErosionAmount;
+    }
+    public void updategreenSpread(int _greenSpread)
+    {
+        ColorSpreadGreen = _greenSpread;
+    }
+    public void updategreenR(float _greenR)
+    {
+        greenR = _greenR;
+    }
+    public void updategreenG(float _greenG)
+    {
+        greenG = _greenG;
+    }
+    public void updategreenB(float _greenB)
+    {
+        greenB = _greenB;
+    }
+    public void updateblueSpread(int _BlueSpread)
+    {
+        ColorSpreadBlue = _BlueSpread;
+    }
+    public void updateblueR(float _blueR)
+    {
+        blueR = _blueR;
+    }
+    public void updateblueG(float _blueG)
+    {
+        blueG = _blueG;
+    }
+    public void updateblueB(float _blueB)
+    {
+        blueB = _blueB;
+    }
+    public void updateyellowSpread(int _yellowSpread)
+    {
+        ColorSpreadYellow = _yellowSpread;
+    }
+    public void updateyellowR(float _yellowR)
+    {
+        yellowR = _yellowR;
+    }
+    public void updateyellowG(float _yellowG)
+    {
+        yellowG = _yellowG;
+    }
+    public void updateyellowB(float _yellowB)
+    {
+        yellowB = _yellowB;
     }
 }
 

@@ -33,26 +33,31 @@ public class WorldGeneration : Singleton<WorldGeneration>
     public GameObject[] trees;
     public GameObject[] Cactus;
     public GameObject[] WaterPlants;
-    public int ErosionAmount = 3;
-    public float ContrastAmount = 1.0f;
-    public float TresholdAmount = 0.4f;
+    int ErosionAmount = 3;
+    float ContrastAmount = 1.2f;
+    float TresholdAmount = 0.6f;
 
-    int ColorSpreadGreen = 30;
-    int ColorSpreadBlue = 42;
-    int ColorSpreadYellow = 40;
-    int ColorSpreadRed = 40;
+    int ColorSpreadGreen = 45;
+    int ColorSpreadBlue = 50;
+    int ColorSpreadYellow = 50;
+    int ColorSpreadbrown = 50;
+    int ColorSpreadRed = 50;
 
-    float greenR = 110;
-    float greenG = 170;
-    float greenB = 120;
+    float greenR = 90;
+    float greenG = 180;
+    float greenB = 80;
 
-    float blueR = 110;
-    float blueG = 150;
+    float blueR = 90;
+    float blueG = 130;
     float blueB = 210;
 
     float yellowR = 200;
     float yellowG = 180;
     float yellowB = 70;
+
+    float brownR = 200;
+    float brownG = 180;
+    float brownB = 70;
 
 
     Color LookingForGreen;
@@ -99,10 +104,10 @@ public class WorldGeneration : Singleton<WorldGeneration>
                 if (spawn[w, h] == 3) //Here it the spawn arrays is true at that position.
                 {
                     image[w, h] = (GameObject)Instantiate(pixPrefab, new Vector3(10.5f - w, 0, 10.5f - h), Quaternion.identity);
-                    int tmp_int = (int)UnityEngine.Random.Range(1, 10);
+                    int tmp_int = (int)UnityEngine.Random.Range(0, 30);
                     if (tmp_int == 5)
                     {
-                        int whatGrass = 0;//(int)UnityEngine.Random.Range(1, 1);
+                        int whatGrass = (int)UnityEngine.Random.Range(0, 2);
                         GameObject tmp_object = Grass[whatGrass];
                         tmp_object.transform.position = new Vector3(10.5f - w, 0.5f, 10.5f - h);
                         tmp_object.transform.Rotate(0, 20, 0);
@@ -125,13 +130,13 @@ public class WorldGeneration : Singleton<WorldGeneration>
 
                 if (spawn[w, h] == 1)
                 {
-                    image[w, h] = (GameObject)Instantiate(pixPrefab, new Vector3(10.5f - w, 0, 10.5f - h), Quaternion.identity);
+                    image[w, h] = (GameObject)Instantiate(pixPrefab, new Vector3(10.5f - w, -0.5f, 10.5f - h), Quaternion.identity);
                     int tmp_int = (int)UnityEngine.Random.Range(1, 150);
                     if (tmp_int == 5)
                     {
                         int whatPlants = (int)UnityEngine.Random.Range(0, 7);
                         GameObject tmp_object = WaterPlants[whatPlants];
-                        tmp_object.transform.position = new Vector3(10.5f - w, 0.5f, 10.5f - h);
+                        tmp_object.transform.position = new Vector3(10.5f - w, 0.0f, 10.5f - h);
                         Instantiate(tmp_object);
                     }
                 }
@@ -292,6 +297,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
                     if (spawn[w, h] == 3)
                     {
                         image[w, h].transform.parent = parentsIsland.ElementAt(parentsUsedisland).transform;
+                        
                         countisland++;
                         if ((countisland) / (parentsUsedisland + 1) >= 2000)
                         {
@@ -354,6 +360,8 @@ public class WorldGeneration : Singleton<WorldGeneration>
     public void CallErosion()
     {
         resetImage();
+
+        imageValues = Contrast(imageValues, ContrastAmount);
         Treshold(imageValues, TresholdAmount);
         imageValues = Erosion(imageValues, ErosionAmount);
         SetPixels2D(imageValues, tex);
@@ -380,8 +388,8 @@ public class WorldGeneration : Singleton<WorldGeneration>
         resetImage();
         resetColorImage();
         Treshold(imageValues, TresholdAmount);
-        imageValues = Erosion(imageValues, ErosionAmount);
         imageValues = Contrast(imageValues, ContrastAmount);
+        imageValues = Erosion(imageValues, ErosionAmount);
         imageValues = whiteborder(imageValues);
         InitailizeGrassfire();
         SetPixels2D(imageValues, tex);
@@ -474,9 +482,18 @@ public class WorldGeneration : Singleton<WorldGeneration>
         {
             for (int h = 0; h < i.GetLength(1); h++)
             {
-                i[w, h].r *= a;
-                i[w, h].g *= a;
-                i[w, h].b *= a;
+                if ((i[w, h].r + i[w, h].g + i[w, h].b) / 3 < 0.4)
+                {
+                    i[w, h].r /= a;
+                    i[w, h].g /= a;
+                    i[w, h].b /= a;
+                }
+                if (((i[w, h].r + i[w, h].g + i[w, h].b) / 3) > 0.4)
+                {
+                    i[w, h].r *= a;
+                    i[w, h].g *= a;
+                    i[w, h].b *= a;
+                }
             }
         }
         return i;
@@ -484,8 +501,6 @@ public class WorldGeneration : Singleton<WorldGeneration>
 
     public Color[,] whiteborder(Color[,] i)
     {
-        //i = Treshold(i, 0.5f);
-        Color[,] result2 = new Color[i.GetLength(0), i.GetLength(1)];
         for (int w = 0; w < i.GetLength(0); w++)
         {
             for (int h = 0; h < i.GetLength(1); h++)
@@ -503,8 +518,6 @@ public class WorldGeneration : Singleton<WorldGeneration>
 
     public Color[,] Erosion(Color[,] i, int k)
     {
-        //set source image to grayscale
-
         Color[,] result = new Color[i.GetLength(0), i.GetLength(1)];
 
         for (int w = 0 + k; w < i.GetLength(0) - k; w++)

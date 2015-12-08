@@ -9,11 +9,11 @@ public class Follow : Singleton<Follow>
     public bool first, second, third;
     float speed = 2.0f;
     private float distance = 5.0f;
-    private float xSpeed = 120.0f;
-    private float ySpeed = 120.0f;
+    private float xSpeed = 500.0f;
+    private float ySpeed = 500.0f;
 
-    private float yMinLimit = -20f;
-    private float yMaxLimit = 80f;
+    private float yMinLimit = 0f;
+    private float yMaxLimit = 90f;
 
     private float distanceMin = .5f;
     private float distanceMax = 45f;

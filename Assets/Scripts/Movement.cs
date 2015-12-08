@@ -21,6 +21,5 @@ public class Movement : Singleton<Movement>
         movement = Camera.main.transform.TransformDirection(movement);
 
         GetComponent<Rigidbody>().velocity = movement*speed;
-
     }
 }   

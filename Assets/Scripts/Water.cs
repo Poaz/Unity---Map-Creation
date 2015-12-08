@@ -35,6 +35,7 @@ public void Start()
         transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
         gameObject.GetComponent<Renderer>().material.mainTexture = mat;
         transform.gameObject.AddComponent<BoxCollider>();
+        //BoxCollider.size = new Vector3(GetComponent<Collider>().size.x, ySize, GetComponent<Collider>().size.z);
         transform.GetComponent<MeshFilter>().mesh.Optimize();
         
         transform.gameObject.SetActive(true);

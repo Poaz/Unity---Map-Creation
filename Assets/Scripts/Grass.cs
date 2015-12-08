@@ -31,14 +31,16 @@ public void Start()
 
         Texture mat = Resources.Load("grassland") as Texture;
         //renderer.material = mat;
+
         transform.GetComponent<MeshFilter>().mesh = new Mesh();
+
         transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
-        gameObject.GetComponent<Renderer>().material.mainTexture = mat;
-        transform.gameObject.AddComponent<BoxCollider>();
         transform.GetComponent<MeshFilter>().mesh.Optimize();
-        
+        transform.GetComponent<Renderer>().material.mainTexture = mat;
+        gameObject.AddComponent<BoxCollider>();
         transform.gameObject.SetActive(true);
         this.gameObject.isStatic = true;
-        
+
+
     }
 }

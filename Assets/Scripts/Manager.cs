@@ -12,13 +12,15 @@ public class Manager : Singleton<Manager> {
     [SerializeField] private Button Respawn;
     [SerializeField] private Button ResetColors;
 
+
+
+    int currentErosionAmount = 3;
+    float currentContrastAmount = 1.2f;
+    float currentTresholdAmount = 0.6f;
+
     public InputField ContrastAmount;
     public InputField ErosionAmount;
     public InputField TresholdAmount;
-
-    int currentErosionAmount = 3;
-    float currentContrastAmount = 1.0f;
-    float currentTresholdAmount = 0.4f;
 
     public InputField greenSpread;
     public InputField greenR;
@@ -35,16 +37,16 @@ public class Manager : Singleton<Manager> {
     public InputField yellowG;
     public InputField yellowB;
 
-    int currentgreenSpread = 30;
-    int currentblueSpread = 42;
-    int currentyellowSpread = 40;
+    int currentgreenSpread = 45;
+    int currentblueSpread = 50;
+    int currentyellowSpread = 50;
 
-    float currentgreenR = 110;
-    float currentgreenG = 170;
-    float currentgreenB = 120;
+    float currentgreenR = 90;
+    float currentgreenG = 180;
+    float currentgreenB = 80;
 
-    float currentblueR = 110;
-    float currentblueG = 150;
+    float currentblueR = 90;
+    float currentblueG = 130;
     float currentblueB = 210;
 
     float currentyellowR = 200;

@@ -21,6 +21,15 @@ public class WorldGeneration : Singleton<WorldGeneration>
     GameObject[,] image;
     GameObject[,] image2;
     List<Coords> labels;
+
+    public int scale = 10;
+    private List<Coords> tmp_colorCoords = new List<Coords>();
+    public GameObject mountainModel;
+    List<GameObject> gameObjects = new List<GameObject>();
+    int[] tmp_coords;
+    int counter2 = 0;
+    private bool[,] spawn2;
+
     private bool first = true;
     private int[,] spawn;
     int theWidth;
@@ -42,8 +51,8 @@ public class WorldGeneration : Singleton<WorldGeneration>
     int ColorSpreadGreen = 45;
     int ColorSpreadBlue = 50;
     int ColorSpreadYellow = 50;
-    int ColorSpreadbrown = 50;
-    int ColorSpreadRed = 50;
+    int ColorSpreadbrown = 20;
+    int ColorSpreadRed = 20;
 
     float greenR = 90;
     float greenG = 180;
@@ -57,19 +66,20 @@ public class WorldGeneration : Singleton<WorldGeneration>
     float yellowG = 180;
     float yellowB = 70;
 
-    float brownR = 200;
-    float brownG = 180;
-    float brownB = 70;
-
+    float brownR = 150;
+    float brownG = 100;
+    float brownB = 80;
 
     Color LookingForGreen;
     Color LookingForBlue;
-    Color LookingForYellow; 
+    Color LookingForYellow;
+    Color LookingForBrown;
     Color LookingForRed = new Color(215f / 255, 90f / 255, 85f / 255);
     public int spawnX, spawnZ;
 
     void Start()
     {
+
         parentsIsland = new List<GameObject>();
         parentsDirt = new List<GameObject>();
         parentsWater = new List<GameObject>();
@@ -98,6 +108,24 @@ public class WorldGeneration : Singleton<WorldGeneration>
                 }
             }
         }
+        for (int w = 0; w < theWidth; w++)
+        {
+            for (int h = 0; h < theHeight; h++)
+            {
+                if (!DetectColor(ColorimageValues[w, h], LookingForBrown, ColorSpreadbrown) && !spawn2[w, h])
+                {
+                    tmp_colorCoords = SequentialGrassFire5(w, h);
+                    //Debug.Log("Red box: " + tmp_colorCoords.Count);
+                    tmp_coords = FindHighestValue(tmp_colorCoords);
+                    //Debug.Log("X = " + (tmp_coords[0] - tmp_coords[1]) + " Y = " + (tmp_coords[2] - tmp_coords[3]));
+                    PlaceMountain((tmp_coords[0] - tmp_coords[1]), (tmp_coords[2] - tmp_coords[3]), FindMiddle(tmp_colorCoords)[0], FindMiddle(tmp_colorCoords)[1], counter2);
+                    counter2++;
+                }
+            }
+        }
+        //SetPixels2D(image, tex);
+        //this.GetComponent<Renderer>().material.mainTexture = tex;
+
 
         for (int w = 0; w < theWidth; w++)
         {
@@ -157,10 +185,10 @@ public class WorldGeneration : Singleton<WorldGeneration>
                         tmp_object.transform.position = new Vector3(10.5f - w, 0, 10.5f - h);
                         Instantiate(tmp_object);
                     }
-                    }
                 }
             }
-        }
+            }
+    }
     
     public void SequentialGrassFire(int x, int y)
     {
@@ -283,6 +311,50 @@ public class WorldGeneration : Singleton<WorldGeneration>
 
             }
         }
+    }
+
+    public List<Coords> SequentialGrassFire5(int x, int y)
+    {
+        List<Coords> tmp_list = new List<Coords>();
+        int h;
+        int w;
+        labels.Add(new Coords(x, y));
+        tmp_list.Add(new Coords(x, y));
+        while (labels.Count > 0)
+        {
+            h = labels[0].getH();
+            w = labels[0].getW();
+            if (!spawn2[w, h])
+            {
+                spawn2[w, h] = true;
+                if (h - 1 >= 0 && !DetectColor(ColorimageValues[w, h - 1], LookingForBrown, ColorSpreadbrown))
+                {
+                    labels.Add(new Coords(w, h - 1));
+                    tmp_list.Add(new Coords(w, h - 1));
+                }
+                if (h + 1 < theHeight && !DetectColor(ColorimageValues[w, h + 1], LookingForBrown, ColorSpreadbrown))
+                {
+                    labels.Add(new Coords(w, h + 1));
+                    tmp_list.Add(new Coords(w, h + 1));
+                }
+                if (w - 1 >= 0 && !DetectColor(ColorimageValues[w - 1, h], LookingForBrown, ColorSpreadbrown))
+                {
+                    labels.Add(new Coords(w - 1, h));
+                    tmp_list.Add(new Coords(w - 1, h));
+                }
+                if (w + 1 < theWidth && !DetectColor(ColorimageValues[w + 1, h], LookingForBrown, ColorSpreadbrown))
+                {
+                    labels.Add(new Coords(w + 1, h));
+                    tmp_list.Add(new Coords(w + 1, h));
+                }
+                labels.RemoveAt(0);
+            }
+            else
+            {
+                labels.RemoveAt(0);
+            }
+        }
+        return tmp_list;
     }
 
     public void CallCombineMesh(bool callmemaybe)
@@ -439,7 +511,14 @@ public class WorldGeneration : Singleton<WorldGeneration>
                     i[w, h].g = 0;
                     i[w, h].b = 0;
                 }
-                else{
+                else if (DetectColor(ColorimageValues[w, h], LookingForBrown, ColorSpreadbrown))
+                {
+                    i[w, h].r = 0;
+                    i[w, h].g = 0;
+                    i[w, h].b = 0;
+                }
+                else
+                {
                         i[w, h].r = 255;
                         i[w, h].g = 255;
                         i[w, h].b = 255;
@@ -572,7 +651,6 @@ public class WorldGeneration : Singleton<WorldGeneration>
         return texture2d;
     }
 
-
     public void SetPixels2D(Color[,] i, Texture2D t)
     {
         Color[] texture1d = new Color[i.Length];
@@ -621,7 +699,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
                     found++;
                     spawnX = spawnX + w;
                     spawnZ = spawnZ + h;
-                    Debug.Log("spawnpoint = " + spawnX + " , " + spawnZ);
+                    //Debug.Log("spawnpoint = " + spawnX + " , " + spawnZ);
                 }
             }
         }
@@ -668,7 +746,93 @@ public class WorldGeneration : Singleton<WorldGeneration>
         LookingForGreen = new Color(greenR / 255, greenG / 255, greenB / 255);
         LookingForBlue = new Color(blueR / 255, blueG / 255, blueB / 255);
         LookingForYellow = new Color(yellowR / 255, yellowG / 255, yellowB / 255);
+        LookingForBrown = new Color(brownR / 255, brownG / 255, brownB / 255);
+        spawn2 = new bool[ColorInputMap.width, ColorInputMap.height];
     }
+
+
+    public int[] FindHighestValue(List<Coords> list)
+    {
+        int tmp_int = 0;
+        int[] coords = new int[4];
+        //Find highest w value
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (list.ElementAt(i).getW() > tmp_int)
+            {
+                tmp_int = list.ElementAt(i).getW();
+            }
+        }
+        coords[0] = tmp_int;
+        tmp_int = ColorInputMap.width;
+        //find the lowest w value
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (list.ElementAt(i).getW() < tmp_int)
+            {
+                tmp_int = list.ElementAt(i).getW();
+            }
+        }
+        coords[1] = tmp_int;
+        tmp_int = 0;
+        //Find highest h value
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (list.ElementAt(i).getH() > tmp_int)
+            {
+                tmp_int = list.ElementAt(i).getH();
+            }
+        }
+        coords[2] = tmp_int;
+        tmp_int = ColorInputMap.height;
+        //Find the lowest h value
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (list.ElementAt(i).getH() < tmp_int)
+            {
+                tmp_int = list.ElementAt(i).getH();
+            }
+        }
+        coords[3] = tmp_int;
+        return coords;
+    }
+
+    public int[] FindMiddle(List<Coords> list)
+    {
+        int[] tmp_array = new int[2];
+        int totalXValue = 0;
+        int totalYValue = 0;
+        for (int w = 0; w < list.Count; w++)
+        {
+            totalXValue += list[w].getW();
+            totalYValue += list[w].getH();
+        }
+        tmp_array[0] = (totalXValue / list.Count);
+        tmp_array[1] = (totalYValue / list.Count);
+        return tmp_array;
+    }
+
+    public void PlaceMountain(int width, int length, int x, int y, int nr)
+    {
+        x = -x;
+        y = -y;
+
+        int height;
+        if (width < length)
+        {
+            length = width;
+            height = width;
+        }
+        else
+        {
+            width = length;
+            height = length;
+        }
+        Debug.Log("Placing mountain @ " + x + ":" + y);
+        gameObjects.Add((GameObject)Instantiate(mountainModel, new Vector3(x, (height / scale) * 7, y), Quaternion.identity) as GameObject);
+        gameObjects[nr].transform.localScale = new Vector3(width / scale, length / scale, height / scale);
+    }
+
 
     public void updateContrast(float _ContrastAmount)
     {

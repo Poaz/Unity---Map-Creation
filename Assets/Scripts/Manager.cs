@@ -8,7 +8,7 @@ public class Manager : Singleton<Manager> {
     [SerializeField] private Button erosion;
     [SerializeField] private Button Reset;
     [SerializeField] private Button generate;
-    [SerializeField] private Button LookForBlue;
+    [SerializeField] private Button LookForColors;
     [SerializeField] private Button Respawn;
     [SerializeField] private Button ResetColors;
 
@@ -67,7 +67,7 @@ public class Manager : Singleton<Manager> {
         Reset.onClick.AddListener(() => { Navigator(2); });
         generate.onClick.AddListener(() => { Navigator(3); });
         Respawn.onClick.AddListener(() => { Navigator(4); });
-        LookForBlue.onClick.AddListener(() => { Navigator(5); });
+        LookForColors.onClick.AddListener(() => { Navigator(5); });
         ResetColors.onClick.AddListener(() => { Navigator(6); });
 
         ContrastAmount.onEndEdit.AddListener(updateContrast);

@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 
 Project("{B7955EDB-65CB-75D9-288A-65BECF3C08C8}") = "Unity---Map-Creation", "Assembly-CSharp.csproj", "{F33EFECD-867C-78F0-C5D3-7D0B4A68F187}"
 EndProject
+Project("{B7955EDB-65CB-75D9-288A-65BECF3C08C8}") = "Unity---Map-Creation", "Assembly-CSharp-Editor.csproj", "{6C9F26D8-C701-89B4-025A-1E6A37B28A0A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,11 +15,15 @@ Global
 		{F33EFECD-867C-78F0-C5D3-7D0B4A68F187}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F33EFECD-867C-78F0-C5D3-7D0B4A68F187}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F33EFECD-867C-78F0-C5D3-7D0B4A68F187}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C9F26D8-C701-89B4-025A-1E6A37B28A0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C9F26D8-C701-89B4-025A-1E6A37B28A0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C9F26D8-C701-89B4-025A-1E6A37B28A0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C9F26D8-C701-89B4-025A-1E6A37B28A0A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-																							GlobalSection(MonoDevelopProperties) = preSolution
+																																				GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1

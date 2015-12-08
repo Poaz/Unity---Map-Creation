@@ -8,12 +8,13 @@ using System.Collections;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
+
 //[RequireComponent(typeof(BoxCollider))]
 public class Water : Singleton<Water> {
-	
-//private Texture whatevercolor = Resources.Load("grassland2.jpg") as Texture;
- 
-public void Start()
+
+    //private Texture whatevercolor = Resources.Load("grassland2.jpg") as Texture;
+
+    public void Start()
 {
         //yield return new WaitForSeconds(3f);
 
@@ -31,10 +32,16 @@ public void Start()
 
         Texture mat = Resources.Load("watertexture") as Texture;
         //renderer.material = mat;
+
+
+
         transform.GetComponent<MeshFilter>().mesh = new Mesh();
         transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
         gameObject.GetComponent<Renderer>().material.mainTexture = mat;
-        transform.gameObject.AddComponent<BoxCollider>();
+        MeshCollider collider = transform.gameObject.AddComponent<MeshCollider>();
+        //collider.size = new Vector3(1, 5, 1);
+        //transform.gameObject.AddComponent<BoxCollider>();
+
         //BoxCollider.size = new Vector3(GetComponent<Collider>().size.x, ySize, GetComponent<Collider>().size.z);
         transform.GetComponent<MeshFilter>().mesh.Optimize();
         

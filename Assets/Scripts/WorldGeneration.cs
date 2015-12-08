@@ -9,6 +9,7 @@ using UnityEditor;
 public class WorldGeneration : Singleton<WorldGeneration>
 {
     public GameObject pixPrefab;
+    //public GameObject WaterPrefab;
     public GameObject showingcolour;
     public Texture2D inputMap;
     public Texture2D ColorInputMap;
@@ -33,6 +34,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
     public GameObject[] trees;
     public GameObject[] Cactus;
     public GameObject[] WaterPlants;
+    Texture mat;
     int ErosionAmount = 3;
     float ContrastAmount = 1.2f;
     float TresholdAmount = 0.6f;
@@ -73,7 +75,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
         parentsWater = new List<GameObject>();
         parentsDesert = new List<GameObject>();
         labels = new List<Coords>();
-
+        mat = Resources.Load("water") as Texture;
         resetImage();
         resetColorImage();
         FindSpawnPoint();
@@ -112,6 +114,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
                         tmp_object.transform.position = new Vector3(10.5f - w, 0.5f, 10.5f - h);
                         tmp_object.transform.Rotate(0, 20, 0);
                         Instantiate(tmp_object);
+
                     }
                 }
 
@@ -125,6 +128,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
                         GameObject tmp_object = trees[whatTree];
                         tmp_object.transform.position = new Vector3(10.5f - w, 0.5f, 10.5f - h);
                         Instantiate(tmp_object);
+
                     }
                 }
 
@@ -138,6 +142,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
                         GameObject tmp_object = WaterPlants[whatPlants];
                         tmp_object.transform.position = new Vector3(10.5f - w, 0.0f, 10.5f - h);
                         Instantiate(tmp_object);
+
                     }
                 }
 
@@ -151,7 +156,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
                         GameObject tmp_object = Cactus[whatCactus];
                         tmp_object.transform.position = new Vector3(10.5f - w, 0, 10.5f - h);
                         Instantiate(tmp_object);
-                        }
+                    }
                     }
                 }
             }

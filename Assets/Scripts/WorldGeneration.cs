@@ -52,7 +52,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
     int ColorSpreadGreen = 45;
     int ColorSpreadBlue = 50;
     int ColorSpreadYellow = 50;
-    int ColorSpreadbrown = 20;
+    int ColorSpreadbrown = 40;
     int ColorSpreadRed = 20;
 
     float greenR = 90;
@@ -67,9 +67,9 @@ public class WorldGeneration : Singleton<WorldGeneration>
     float yellowG = 180;
     float yellowB = 70;
 
-    float brownR = 150;
-    float brownG = 100;
-    float brownB = 80;
+    float brownR = 140;
+    float brownG = 90;
+    float brownB = 70;
 
     Color LookingForGreen;
     Color LookingForBlue;
@@ -904,6 +904,22 @@ public class WorldGeneration : Singleton<WorldGeneration>
     public void updateyellowB(float _yellowB)
     {
         yellowB = _yellowB;
+    }
+    public void updatebrownSpread(int _yellowBrown)
+    {
+        ColorSpreadbrown = _yellowBrown;
+    }
+    public void updatebrownR(float _brownR)
+    {
+        brownR = _brownR;
+    }
+    public void updatebrownG(float _brownG)
+    {
+        brownG = _brownG;
+    }
+    public void updatebrownB(float _brownB)
+    {
+        brownB = _brownB;
     }
 }
 

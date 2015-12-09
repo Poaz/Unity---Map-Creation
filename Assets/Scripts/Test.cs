@@ -13,6 +13,7 @@ public class Test : Singleton<Test> {
     Color[,] tempColor;
     public bool haveColored = true;
     public GameObject showingPath;
+    public int TestNr = 0;
     
 
     // Use this for initialization
@@ -71,7 +72,7 @@ public class Test : Singleton<Test> {
             }
             WorldGeneration.Instance.SetPixels2D(tempColor, tempMap);
             showingPath.GetComponent<Renderer>().material.mainTexture = tempMap;
-            System.IO.File.WriteAllBytes(Application.dataPath + "/" + "testing123.png", tempMap.EncodeToPNG());
+            System.IO.File.WriteAllBytes(Application.dataPath + "/" + "testing"+TestNr+".png", tempMap.EncodeToPNG());
             haveColored = true;
         }
     }

@@ -38,9 +38,15 @@ public class Manager : Singleton<Manager> {
     public InputField yellowG;
     public InputField yellowB;
 
+    public InputField brownSpread;
+    public InputField brownR;
+    public InputField brownG;
+    public InputField brownB;
+
     int currentgreenSpread = 45;
     int currentblueSpread = 50;
     int currentyellowSpread = 50;
+    int currentbrownSpread = 30;
 
     float currentgreenR = 90;
     float currentgreenG = 180;
@@ -53,6 +59,10 @@ public class Manager : Singleton<Manager> {
     float currentyellowR = 200;
     float currentyellowG = 180;
     float currentyellowB = 70;
+
+    float currentbrownR = 140;
+    float currentbrownG = 90;
+    float currentbrownB = 70;
 
     int width, height;
     public GameObject MainMenu;
@@ -88,6 +98,10 @@ public class Manager : Singleton<Manager> {
         yellowR.onEndEdit.AddListener(updateyellowR);
         yellowG.onEndEdit.AddListener(updateyellowG);
         yellowB.onEndEdit.AddListener(updateyellowB);
+        brownSpread.onEndEdit.AddListener(updatebrownSpread);
+        yellowR.onEndEdit.AddListener(updatebrownR);
+        yellowG.onEndEdit.AddListener(updatebrownG);
+        yellowB.onEndEdit.AddListener(updatebrownB);
 
 
 
@@ -169,6 +183,27 @@ public class Manager : Singleton<Manager> {
     {
         currentyellowB = float.Parse(hmm);
         WorldGeneration.Instance.updateyellowB(currentyellowB);
+    }
+
+    public void updatebrownSpread(string hmm)
+    {
+        currentbrownSpread = int.Parse(hmm);
+        WorldGeneration.Instance.updatebrownSpread(currentbrownSpread);
+    }
+    public void updatebrownR(string hmm)
+    {
+        currentbrownR = float.Parse(hmm);
+        WorldGeneration.Instance.updatebrownR(currentbrownR);
+    }
+    public void updatebrownG(string hmm)
+    {
+        currentbrownG = float.Parse(hmm);
+        WorldGeneration.Instance.updatebrownG(currentbrownG);
+    }
+    public void updatebrownB(string hmm)
+    {
+        currentbrownB = float.Parse(hmm);
+        WorldGeneration.Instance.updatebrownB(currentbrownB);
     }
 
     public void Navigator(int nr) {

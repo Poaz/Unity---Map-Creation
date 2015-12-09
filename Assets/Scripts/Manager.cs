@@ -11,6 +11,7 @@ public class Manager : Singleton<Manager> {
     [SerializeField] private Button LookForColors;
     [SerializeField] private Button Respawn;
     [SerializeField] private Button ResetColors;
+    [SerializeField] private Button showPath;
 
 
 
@@ -69,6 +70,7 @@ public class Manager : Singleton<Manager> {
         Respawn.onClick.AddListener(() => { Navigator(4); });
         LookForColors.onClick.AddListener(() => { Navigator(5); });
         ResetColors.onClick.AddListener(() => { Navigator(6); });
+        showPath.onClick.AddListener(() => { Navigator(7); });
 
         ContrastAmount.onEndEdit.AddListener(updateContrast);
         ErosionAmount.onEndEdit.AddListener(updateErosion);
@@ -190,18 +192,17 @@ public class Manager : Singleton<Manager> {
                 Follow.Instance.second = false;
                 Follow.Instance.third = false;
                 WorldGeneration.Instance.resetImage();
-                currentErosionAmount = 3;
-                currentContrastAmount = 1.0f;
-                currentTresholdAmount = 0.4f;
                 //eventually it will reset the picture!
                 break;
             case 3:
                 WorldGeneration.Instance.CallGrassFire();
                 WorldGeneration.Instance.CallCombineMesh(true);
+                Test.Instance.isRunning = true;
+                Test.Instance.haveColored = false;
                 Follow.Instance.first = false;
                 Follow.Instance.second = false; 
                 Follow.Instance.third = true;
-                Movement.Instance.transform.position = new Vector3(-(WorldGeneration.Instance.spawnX), 1, -(WorldGeneration.Instance.spawnZ));
+                Movement.Instance.transform.position = new Vector3(-(WorldGeneration.Instance.spawnX), 0.5f, -(WorldGeneration.Instance.spawnZ));
                 MainMenu.SetActive(false);
                 PlayingMenu.SetActive(true);
 
@@ -224,6 +225,12 @@ public class Manager : Singleton<Manager> {
                 Follow.Instance.second = false;
                 Follow.Instance.third = false;
                 WorldGeneration.Instance.resetColorImage();
+                break;
+            case 7:
+                Follow.Instance.first = false;
+                Follow.Instance.second = false;
+                Follow.Instance.third = true;
+                Test.Instance.isRunning = false;
                 break;
         }
     }

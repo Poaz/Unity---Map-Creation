@@ -12,8 +12,8 @@ public class Follow : Singleton<Follow>
     private float xSpeed = 500.0f;
     private float ySpeed = 500.0f;
 
-    private float yMinLimit = 3f;
-    private float yMaxLimit = 90f;
+    private float yMinLimit = -60f;
+    private float yMaxLimit = 60f;
 
     private float distanceMin = .5f;
     private float distanceMax = 45f;
@@ -74,14 +74,14 @@ public class Follow : Singleton<Follow>
 
                 Quaternion rotation = Quaternion.Euler(y, x, 0);
 
-                distance = Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel") * 5, distanceMin, distanceMax);
+                distance = 0; //Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel") * 5, distanceMin, distanceMax);
 
             /*    RaycastHit hit;
                 if (Physics.Linecast(target.position, transform.position, out hit))
                 {
                     distance -= hit.distance;
                 }*/
-                Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
+                Vector3 negDistance = new Vector3(0.0f, 2.0f, 0);
                 Vector3 position = rotation * negDistance + target.position;
 
                 transform.rotation = rotation;

@@ -22,13 +22,14 @@ public class WorldGeneration : Singleton<WorldGeneration>
     GameObject[,] image2;
     List<Coords> labels;
 
-    public int scale = 10;
+    public int scale = 17;
     private List<Coords> tmp_colorCoords = new List<Coords>();
     public GameObject mountainModel;
     List<GameObject> gameObjects = new List<GameObject>();
     int[] tmp_coords;
     int counter2 = 0;
     private bool[,] spawn2;
+    bool secondmountain = false;
 
     private bool first = true;
     private int[,] spawn;
@@ -116,15 +117,20 @@ public class WorldGeneration : Singleton<WorldGeneration>
                 {
                     tmp_colorCoords = SequentialGrassFire5(w, h);
                     //Debug.Log("Red box: " + tmp_colorCoords.Count);
-                    tmp_coords = FindHighestValue(tmp_colorCoords);
+
                     //Debug.Log("X = " + (tmp_coords[0] - tmp_coords[1]) + " Y = " + (tmp_coords[2] - tmp_coords[3]));
-                    PlaceMountain((tmp_coords[0] - tmp_coords[1]), (tmp_coords[2] - tmp_coords[3]), FindMiddle(tmp_colorCoords)[0], FindMiddle(tmp_colorCoords)[1], counter2);
+                   // if (secondmountain)
+                    //{
+                        tmp_coords = FindHighestValue(tmp_colorCoords);
+                        PlaceMountain((tmp_coords[0] - tmp_coords[1]), (tmp_coords[2] - tmp_coords[3]), FindMiddle(tmp_colorCoords)[0], FindMiddle(tmp_colorCoords)[1], counter2);
+                    //}
                     counter2++;
-                }
+                    secondmountain = true;
+                    }
+                
             }
         }
-        //SetPixels2D(image, tex);
-        //this.GetComponent<Renderer>().material.mainTexture = tex;
+        Destroy(gameObjects[0]);
 
 
         for (int w = 0; w < theWidth; w++)
@@ -828,9 +834,14 @@ public class WorldGeneration : Singleton<WorldGeneration>
             width = length;
             height = length;
         }
-        Debug.Log("Placing mountain @ " + x + ":" + y);
-        gameObjects.Add((GameObject)Instantiate(mountainModel, new Vector3(x, (height / scale) * 7, y), Quaternion.identity) as GameObject);
-        gameObjects[nr].transform.localScale = new Vector3(width / scale, length / scale, height / scale);
+        //Debug.Log("Placing mountain @ " + x + ":" + y);
+
+            gameObjects.Add((GameObject)Instantiate(mountainModel, new Vector3(x, (height / scale) * 7, y), Quaternion.identity) as GameObject);            
+       // if (!secondmountain)
+        //{
+            gameObjects[nr].transform.localScale = new Vector3(width / scale, length / scale, height / scale);
+
+       // }
     }
 
 

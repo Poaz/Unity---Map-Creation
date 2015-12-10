@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 
 public class Test : Singleton<Test> {
-    List<Vector3> pos = new List<Vector3>();
+    List<Vector3> testerpos = new List<Vector3>();
+    List<Vector3> playerpos = new List<Vector3>();
     List<Vector3> SavePoints = new List<Vector3>();
     //public GameObject player;
     public bool isRunning = false;
@@ -12,7 +13,7 @@ public class Test : Singleton<Test> {
     public Texture2D tempMap;
     Color[,] tempColor;
     public bool haveColored = true;
-    public GameObject showingPath;
+    public bool tester = true;
     public int TestNr = 0;
     
 
@@ -28,20 +29,45 @@ public class Test : Singleton<Test> {
 	void FixedUpdate () {
         if (isRunning)
         {
-            pos.Add(new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z));
+            if(!tester)
+            playerpos.Add(new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z));
+            if (tester)
+                testerpos.Add(new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z));
+
+            if (Input.GetKeyDown("t"))
+            {
+                tester = true;
+            }
             if (Input.GetKeyDown("p")) {
                 SavePoints.Add(new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z));
+                tester = false;
             }
         }
         if (!isRunning && !haveColored) {
-
-            for (int i = 0; i < pos.Count; i++)
+            for (int i = 0; i < testerpos.Count; i++)
             {
-                int x = (int)pos[i].x;
-                int y = (int)pos[i].z;
+                int x = (int)testerpos[i].x;
+                int y = (int)testerpos[i].z;
                  x = -x;
                  y = -y;
                 if (x > 0 && x < tempMap.width && y > 0 && y < tempMap.height) {
+                    for (int w = x - 1; w < x + 1; w++)
+                    {
+                        for (int h = y - 1; h < y + 1; h++)
+                        {
+                                tempColor[w, h] = Color.blue;   
+                        }
+                    }
+                }  
+            }
+            for (int i = 0; i < playerpos.Count; i++)
+            {
+                int x = (int)playerpos[i].x;
+                int y = (int)playerpos[i].z;
+                x = -x;
+                y = -y;
+                if (x > 0 && x < tempMap.width && y > 0 && y < tempMap.height)
+                {
                     for (int w = x - 1; w < x + 1; w++)
                     {
                         for (int h = y - 1; h < y + 1; h++)
@@ -50,7 +76,6 @@ public class Test : Singleton<Test> {
                         }
                     }
                 }
-                
             }
             for (int i = 0; i < SavePoints.Count; i++)
             {
@@ -71,12 +96,15 @@ public class Test : Singleton<Test> {
 
             }
             WorldGeneration.Instance.SetPixels2D(tempColor, tempMap);
-            showingPath.GetComponent<Renderer>().material.mainTexture = tempMap;
-            System.IO.File.WriteAllBytes(Application.dataPath + "/" + "testing"+TestNr+".png", tempMap.EncodeToPNG());
+            //showingPath.GetComponent<Renderer>().material.mainTexture = tempMap;
+            System.IO.File.WriteAllBytes(Application.dataPath + "/" + "test"+TestNr+".png", tempMap.EncodeToPNG());
             haveColored = true;
         }
     }
-
+    public void updatetestnumber(int _testnr)
+    {
+        TestNr = _testnr;
+    }
 
 
 }

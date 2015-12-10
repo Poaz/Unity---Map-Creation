@@ -46,14 +46,16 @@ public class WorldGeneration : Singleton<WorldGeneration>
     public GameObject[] WaterPlants;
     Texture mat;
     int ErosionAmount = 3;
+    int WBamount = 20;
     float ContrastAmount = 1.2f;
     float TresholdAmount = 0.6f;
+    
 
     int ColorSpreadGreen = 45;
     int ColorSpreadBlue = 50;
     int ColorSpreadYellow = 50;
     int ColorSpreadbrown = 40;
-    int ColorSpreadRed = 20;
+    int ColorSpreadRed = 25;
 
     float greenR = 90;
     float greenG = 180;
@@ -67,9 +69,9 @@ public class WorldGeneration : Singleton<WorldGeneration>
     float yellowG = 180;
     float yellowB = 70;
 
-    float brownR = 140;
-    float brownG = 90;
-    float brownB = 70;
+    float brownR = 160;
+    float brownG = 110;
+    float brownB = 90;
 
     Color LookingForGreen;
     Color LookingForBlue;
@@ -595,7 +597,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
         {
             for (int h = 0; h < i.GetLength(1); h++)
             {
-                if (w < 20 || h < 20 || w > i.GetLength(0) - 20 || h > i.GetLength(1) - 20)
+                if (w < WBamount || h < WBamount || w > i.GetLength(0) - WBamount || h > i.GetLength(1) - WBamount)
                 {
                     i[w, h].r = 1;
                     i[w, h].g = 1;
@@ -857,6 +859,10 @@ public class WorldGeneration : Singleton<WorldGeneration>
     {
         ErosionAmount = _ErosionAmount;
     }
+    public void updateWhiteBorder(int _WhiteBorderAmount)
+    {
+        WBamount = _WhiteBorderAmount;
+    }
     public void updategreenSpread(int _greenSpread)
     {
         ColorSpreadGreen = _greenSpread;
@@ -905,9 +911,9 @@ public class WorldGeneration : Singleton<WorldGeneration>
     {
         yellowB = _yellowB;
     }
-    public void updatebrownSpread(int _yellowBrown)
+    public void updatebrownSpread(int _brownSpread)
     {
-        ColorSpreadbrown = _yellowBrown;
+        ColorSpreadbrown = _brownSpread;
     }
     public void updatebrownR(float _brownR)
     {

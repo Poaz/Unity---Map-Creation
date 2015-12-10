@@ -16,12 +16,16 @@ public class Manager : Singleton<Manager> {
 
 
     int currentErosionAmount = 3;
+    int currentWhiteBorderAmount = 20;
     float currentContrastAmount = 1.2f;
     float currentTresholdAmount = 0.6f;
+    int currenttestnumber = 0;
 
     public InputField ContrastAmount;
     public InputField ErosionAmount;
+    public InputField WhiteBorderAmount;
     public InputField TresholdAmount;
+    public InputField TestNumber;
 
     public InputField greenSpread;
     public InputField greenR;
@@ -46,7 +50,7 @@ public class Manager : Singleton<Manager> {
     int currentgreenSpread = 45;
     int currentblueSpread = 50;
     int currentyellowSpread = 50;
-    int currentbrownSpread = 30;
+    int currentbrownSpread = 25;
 
     float currentgreenR = 90;
     float currentgreenG = 180;
@@ -60,9 +64,9 @@ public class Manager : Singleton<Manager> {
     float currentyellowG = 180;
     float currentyellowB = 70;
 
-    float currentbrownR = 140;
-    float currentbrownG = 90;
-    float currentbrownB = 70;
+    float currentbrownR = 160;
+    float currentbrownG = 110;
+    float currentbrownB = 90;
 
     int width, height;
     public GameObject MainMenu;
@@ -84,7 +88,9 @@ public class Manager : Singleton<Manager> {
 
         ContrastAmount.onEndEdit.AddListener(updateContrast);
         ErosionAmount.onEndEdit.AddListener(updateErosion);
+        WhiteBorderAmount.onEndEdit.AddListener(updateWhiteBorder);
         TresholdAmount.onEndEdit.AddListener(updateTreshold);
+        TestNumber.onEndEdit.AddListener(updateTestnumber);
 
         greenSpread.onEndEdit.AddListener(updategreenSpread);
         greenR.onEndEdit.AddListener(updategreenR);
@@ -99,9 +105,9 @@ public class Manager : Singleton<Manager> {
         yellowG.onEndEdit.AddListener(updateyellowG);
         yellowB.onEndEdit.AddListener(updateyellowB);
         brownSpread.onEndEdit.AddListener(updatebrownSpread);
-        yellowR.onEndEdit.AddListener(updatebrownR);
-        yellowG.onEndEdit.AddListener(updatebrownG);
-        yellowB.onEndEdit.AddListener(updatebrownB);
+        brownR.onEndEdit.AddListener(updatebrownR);
+        brownG.onEndEdit.AddListener(updatebrownG);
+        brownB.onEndEdit.AddListener(updatebrownB);
 
 
 
@@ -116,10 +122,20 @@ public class Manager : Singleton<Manager> {
         currentErosionAmount = int.Parse(hmm);
         WorldGeneration.Instance.updateErosion(currentErosionAmount);
     }
+    public void updateWhiteBorder(string hmm)
+    {
+        currentWhiteBorderAmount = int.Parse(hmm);
+        WorldGeneration.Instance.updateWhiteBorder(currentWhiteBorderAmount);
+    }
     public void updateTreshold(string hmm)
     {
         currentTresholdAmount = float.Parse(hmm);
         WorldGeneration.Instance.updateTreshold(currentTresholdAmount);
+    }
+    public void updateTestnumber(string hmm)
+    {
+        currenttestnumber = int.Parse(hmm);
+        Test.Instance.updatetestnumber(currenttestnumber);
     }
 
     public void updategreenSpread(string hmm)

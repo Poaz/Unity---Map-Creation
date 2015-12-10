@@ -13,7 +13,7 @@ public class Test : Singleton<Test> {
     public Texture2D tempMap;
     Color[,] tempColor;
     public bool haveColored = true;
-    public bool tester = true;
+    public bool tester = false;
     public int TestNr = 0;
     
 
@@ -29,10 +29,7 @@ public class Test : Singleton<Test> {
 	void FixedUpdate () {
         if (isRunning)
         {
-            if(!tester)
-            playerpos.Add(new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z));
-            if (tester)
-                testerpos.Add(new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z));
+            StartCoroutine("setPoints");
 
             if (Input.GetKeyDown("t"))
             {
@@ -96,8 +93,10 @@ public class Test : Singleton<Test> {
 
             }
             WorldGeneration.Instance.SetPixels2D(tempColor, tempMap);
+            Debug.Log("saving");
             //showingPath.GetComponent<Renderer>().material.mainTexture = tempMap;
             System.IO.File.WriteAllBytes(Application.dataPath + "/" + "test"+TestNr+".png", tempMap.EncodeToPNG());
+            Debug.Log("donesaving");
             haveColored = true;
         }
     }
@@ -106,6 +105,14 @@ public class Test : Singleton<Test> {
         TestNr = _testnr;
     }
 
+    IEnumerator setPoints()
+    {
+        if (!tester)
+            playerpos.Add(new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z));
+        if (tester)
+            testerpos.Add(new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z));
+        yield return new WaitForSeconds(10f);
+    }
 
 }
 

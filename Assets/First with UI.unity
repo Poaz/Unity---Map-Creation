@@ -1173,7 +1173,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 25
+  m_Text: 55
 --- !u!222 &183023864
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2272,7 +2272,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 90
+  m_Text: 40
 --- !u!222 &374716263
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2416,7 +2416,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 110
+  m_Text: 30
 --- !u!222 &436625470
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3019,7 +3019,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 50
+  m_Text: 100
 --- !u!222 &540159349
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4083,7 +4083,7 @@ MonoBehaviour:
   tempMap: {fileID: 0}
   haveColored: 1
   tester: 1
-  TestNr: 2
+  TestNr: 0
 --- !u!54 &802592084
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4844,7 +4844,7 @@ RectTransform:
   m_Children:
   - {fileID: 1635087807}
   m_Father: {fileID: 1991443491}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
   m_AnchoredPosition: {x: -10, y: -140}
@@ -5192,7 +5192,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 80
+  m_Text: 100
 --- !u!222 &997261785
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5751,7 +5751,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 50
+  m_Text: 100
 --- !u!222 &1138281759
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6656,7 +6656,7 @@ RectTransform:
   - {fileID: 853020875}
   - {fileID: 1471984438}
   m_Father: {fileID: 1991443491}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 92, y: -5}
@@ -6984,9 +6984,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '45
-
-'
+  m_Text: 70
 --- !u!222 &1533791808
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7426,7 +7424,7 @@ GameObject:
   - 114: {fileID: 1635087809}
   - 114: {fileID: 1635087808}
   m_Layer: 5
-  m_Name: InputField
+  m_Name: TestNo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7608,7 +7606,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 90
+  m_Text: 100
 --- !u!222 &1658078334
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8289,7 +8287,7 @@ RectTransform:
   - {fileID: 348822283}
   - {fileID: 872539097}
   m_Father: {fileID: 1991443491}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -90, y: -5}
@@ -9152,9 +9150,9 @@ RectTransform:
   - {fileID: 1211942935}
   - {fileID: 787764211}
   - {fileID: 1097861983}
+  - {fileID: 931902364}
   - {fileID: 1428271520}
   - {fileID: 1850087458}
-  - {fileID: 931902364}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_AnchorMin: {x: 0, y: 0}
@@ -9185,7 +9183,7 @@ MonoBehaviour:
   ErosionAmount: {fileID: 1915492310}
   WhiteBorderAmount: {fileID: 182679120}
   TresholdAmount: {fileID: 521290880}
-  TestNumber: {fileID: 0}
+  TestNumber: {fileID: 1635087808}
   greenSpread: {fileID: 621521478}
   greenR: {fileID: 1965002448}
   greenG: {fileID: 1912926437}

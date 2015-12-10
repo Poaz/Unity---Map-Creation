@@ -51,15 +51,15 @@ public class WorldGeneration : Singleton<WorldGeneration>
     float TresholdAmount = 0.6f;
     
 
-    int ColorSpreadGreen = 45;
-    int ColorSpreadBlue = 50;
-    int ColorSpreadYellow = 50;
-    int ColorSpreadbrown = 40;
-    int ColorSpreadRed = 25;
+    int ColorSpreadGreen = 70;
+    int ColorSpreadBlue = 100;
+    int ColorSpreadYellow = 100;
+    int ColorSpreadbrown = 55;
+    int ColorSpreadRed = 40;
 
-    float greenR = 90;
+    float greenR = 100;
     float greenG = 180;
-    float greenB = 80;
+    float greenB = 100;
 
     float blueR = 90;
     float blueG = 130;
@@ -70,14 +70,14 @@ public class WorldGeneration : Singleton<WorldGeneration>
     float yellowB = 70;
 
     float brownR = 160;
-    float brownG = 110;
-    float brownB = 90;
+    float brownG = 30;
+    float brownB = 40;
 
     Color LookingForGreen;
     Color LookingForBlue;
     Color LookingForYellow;
     Color LookingForBrown;
-    Color LookingForRed = new Color(215f / 255, 90f / 255, 85f / 255);
+    Color LookingForRed = new Color(200f / 255, 50f / 255, 50f / 255);
     public int spawnX, spawnZ;
 
     void Start()
@@ -472,10 +472,13 @@ public class WorldGeneration : Singleton<WorldGeneration>
     {
         resetImage();
         resetColorImage();
+
         Treshold(imageValues, TresholdAmount);
         imageValues = Contrast(imageValues, ContrastAmount);
         imageValues = Erosion(imageValues, ErosionAmount);
         imageValues = whiteborder(imageValues);
+        ColorimageValues = NormalizedRgb(ColorimageValues);
+        //ColorimageValues = LookForColors(ColorimageValues);
         InitailizeGrassfire();
         SetPixels2D(imageValues, tex);
         this.GetComponent<Renderer>().material.mainTexture = tex;
@@ -484,6 +487,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
     public void CallLookForColors()
     {
         resetColorImage();
+        ColorimageValues = NormalizedRgb(ColorimageValues); 
         ColorimageValues = LookForColors(ColorimageValues);
         SetPixels2D(ColorimageValues, tex2);
         showingcolour.GetComponent<Renderer>().material.mainTexture = tex2;
@@ -644,6 +648,35 @@ public class WorldGeneration : Singleton<WorldGeneration>
         return result;
     }
 
+    public Color[,] Dilation(Color[,] i, int k)
+    {
+        //set source image to grayscale
+        //i = Treshold(i, 0.5f);
+
+        Color[,] result = new Color[i.GetLength(0), i.GetLength(1)];
+
+        for (int w = 0 + k; w < i.GetLength(0) - k; w++)
+        {
+            for (int h = 0 + k; h < i.GetLength(1) - k; h++)
+            {
+                float sum = 0f;
+                for (int j = -k / 2; j <= +k / 2; j++)
+                {
+                    for (int l = -k / 2; l <= +k / 2; l++)
+                    {
+                        sum += i[w + j, h + l].r;
+                    }
+                }
+
+                float res = sum > 0 ? 1f : 0f;
+                result[w, h].r = res;
+                result[w, h].g = res;
+                result[w, h].b = res;
+            }
+        }
+        return result;
+    }
+
     public Color[,] GetPixels2D(Texture2D t)
     {
         Color[,] texture2d = new Color[t.width, t.height];
@@ -657,6 +690,27 @@ public class WorldGeneration : Singleton<WorldGeneration>
             }
         }
         return texture2d;
+    }
+
+    public Color[,] NormalizedRgb(Color[,] i)
+    {
+        for (int w = 0; w < i.GetLength(0); w++)
+        {
+            for (int h = 0; h < i.GetLength(1); h++)
+            {
+                Color pix = i[w, h];
+                float sum = pix.r + pix.g + pix.b;
+                if (sum == 0f)
+                {
+                    i[w, h] = Color.black;
+                }
+                else
+                {
+                    i[w, h] = new Color(i[w, h].r / sum, i[w, h].g / sum, i[w, h].b / sum);
+                }
+            }
+        }
+        return i;
     }
 
     public void SetPixels2D(Color[,] i, Texture2D t)

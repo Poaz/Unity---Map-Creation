@@ -47,14 +47,14 @@ public class Manager : Singleton<Manager> {
     public InputField brownG;
     public InputField brownB;
 
-    int currentgreenSpread = 45;
-    int currentblueSpread = 50;
-    int currentyellowSpread = 50;
-    int currentbrownSpread = 25;
+    int currentgreenSpread = 70;
+    int currentblueSpread = 100;
+    int currentyellowSpread = 100;
+    int currentbrownSpread = 55;
 
-    float currentgreenR = 90;
+    float currentgreenR = 100;
     float currentgreenG = 180;
-    float currentgreenB = 80;
+    float currentgreenB = 100;
 
     float currentblueR = 90;
     float currentblueG = 130;
@@ -65,8 +65,8 @@ public class Manager : Singleton<Manager> {
     float currentyellowB = 70;
 
     float currentbrownR = 160;
-    float currentbrownG = 110;
-    float currentbrownB = 90;
+    float currentbrownG = 30;
+    float currentbrownB = 40;
 
     int width, height;
     public GameObject MainMenu;

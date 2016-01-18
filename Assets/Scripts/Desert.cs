@@ -29,11 +29,12 @@ public void Start()
             i++;
         }
 
-        Texture mat = Resources.Load("SandTexture") as Texture;
+ 
+        Material mat = Resources.Load("sand1") as Material;
         //renderer.material = mat;
         transform.GetComponent<MeshFilter>().mesh = new Mesh();
         transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
-        this.GetComponent<Renderer>().material.mainTexture = mat;
+        this.GetComponent<Renderer>().material = mat;
         transform.gameObject.AddComponent<MeshCollider>();
         transform.GetComponent<MeshFilter>().mesh.Optimize();
         

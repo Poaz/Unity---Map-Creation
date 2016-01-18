@@ -11,6 +11,7 @@ GameObject:
   - 33: {fileID: 3369876}
   - 23: {fileID: 2326574}
   - 95: {fileID: 9550868}
+  - 64: {fileID: 6425182}
   m_Layer: 0
   m_Name: Mountain
   m_TagString: Untagged
@@ -40,7 +41,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: 2a499b48aa6db7246aa22f99c50697ce, type: 2}
+  - {fileID: 2100000, guid: 81de241fec897fc409877da9cfd60e18, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -62,6 +63,18 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 141098}
+  m_Mesh: {fileID: 4300000, guid: 7325ed34cc673d44d9cacff27d52ad81, type: 3}
+--- !u!64 &6425182
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 141098}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Convex: 0
   m_Mesh: {fileID: 4300000, guid: 7325ed34cc673d44d9cacff27d52ad81, type: 3}
 --- !u!95 &9550868
 Animator:
@@ -86,7 +99,11 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 81de241fec897fc409877da9cfd60e18, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 141098}

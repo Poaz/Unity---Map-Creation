@@ -30,14 +30,14 @@ public class Water : Singleton<Water> {
             i++;
         }
 
-        Texture mat = Resources.Load("watertexture") as Texture;
+        Material mat = Resources.Load("water2") as Material;
         //renderer.material = mat;
 
 
 
         transform.GetComponent<MeshFilter>().mesh = new Mesh();
         transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
-        gameObject.GetComponent<Renderer>().material.mainTexture = mat;
+        gameObject.GetComponent<Renderer>().material = mat;
         MeshCollider collider = transform.gameObject.AddComponent<MeshCollider>();
         //collider.size = new Vector3(1, 5, 1);
         //transform.gameObject.AddComponent<BoxCollider>();

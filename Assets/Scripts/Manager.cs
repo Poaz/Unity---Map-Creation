@@ -71,6 +71,7 @@ public class Manager : Singleton<Manager> {
     int width, height;
     public GameObject MainMenu;
     public GameObject PlayingMenu;
+    public GameObject DirectionalLight;
 
     public void Start()
     {
@@ -256,6 +257,7 @@ public class Manager : Singleton<Manager> {
                 Movement.Instance.transform.position = new Vector3(-(WorldGeneration.Instance.spawnX), 0.5f, -(WorldGeneration.Instance.spawnZ));
                 MainMenu.SetActive(false);
                 PlayingMenu.SetActive(true);
+                DirectionalLight.transform.eulerAngles = new Vector3(10, 120, 0);
 
                 break;
             case 4:

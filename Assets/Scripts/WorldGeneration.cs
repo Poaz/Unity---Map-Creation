@@ -141,7 +141,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
             {
                 if (spawn[w, h] == 3) //Here it the spawn arrays is true at that position.
                 {
-                    image[w, h] = (GameObject)Instantiate(pixPrefab, new Vector3(10.5f - w, -15, 10.5f - h), Quaternion.identity);
+                    image[w, h] = (GameObject)Instantiate(pixPrefab, new Vector3(10.5f - w, -14.5f, 10.5f - h), Quaternion.identity);
                     int tmp_int = (int)UnityEngine.Random.Range(0, 30);
                     if (tmp_int == 5)
                     {
@@ -156,7 +156,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
 
                 if(spawn[w,h] == 2)
                 {
-                    image[w, h] = (GameObject)Instantiate(pixPrefab, new Vector3(10.5f - w, -15, 10.5f - h), Quaternion.identity);
+                    image[w, h] = (GameObject)Instantiate(pixPrefab, new Vector3(10.5f - w, -14.5f, 10.5f - h), Quaternion.identity);
                     int tmp_int = (int)UnityEngine.Random.Range(0, 10);
                     if (tmp_int == 5)
                     {
@@ -170,7 +170,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
 
                 if (spawn[w, h] == 1)
                 {
-                    image[w, h] = (GameObject)Instantiate(pixPrefab, new Vector3(10.5f - w, -15.5f, 10.5f - h), Quaternion.identity);
+                    image[w, h] = (GameObject)Instantiate(pixPrefab, new Vector3(10.5f - w, -15, 10.5f - h), Quaternion.identity);
                     int tmp_int = (int)UnityEngine.Random.Range(1, 150);
                     if (tmp_int == 5)
                     {
@@ -184,7 +184,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
 
                 if(spawn[w,h] == 0)
                 {
-                    image[w, h] = (GameObject)Instantiate(pixPrefab, new Vector3(10.5f - w, -15, 10.5f - h), Quaternion.identity);
+                    image[w, h] = (GameObject)Instantiate(pixPrefab, new Vector3(10.5f - w, -14.5f, 10.5f - h), Quaternion.identity);
                     int tmp_int = (int)UnityEngine.Random.Range(1, 500);
                     if (tmp_int == 5)
                     {
@@ -236,7 +236,7 @@ public class WorldGeneration : Singleton<WorldGeneration>
         labels.Add(new Coords(x, y)); //Adds the coords for the first position.
         while (labels.Count > 0) //as long as I have new position to test, this loop will run. 
         {
-            h = labels[0].getH(); //Gets the x and y position for the pixel we are doing right now. 
+            h = labels[0].getH(); //Ge+ts the x and y position for the pixel we are doing right now. 
             w = labels[0].getW(); //^
             if (spawn[w, h] == 2)
             {

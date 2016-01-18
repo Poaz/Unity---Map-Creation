@@ -38,6 +38,13 @@ Material:
           m_Offset: {x: 0, y: 0}
       data:
         first:
+          name: _ColorControl
+        second:
+          m_Texture: {fileID: 2800000, guid: 047330f39d11745ad0004adb8d76c639, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
           name: _ParallaxMap
         second:
           m_Texture: {fileID: 0}
@@ -101,13 +108,6 @@ Material:
           m_Offset: {x: 0, y: 0}
       data:
         first:
-          name: _ColorControl
-        second:
-          m_Texture: {fileID: 2800000, guid: 047330f39d11745ad0004adb8d76c639, type: 3}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
           name: _BumpMap2
         second:
           m_Texture: {fileID: 2800000, guid: 279fb0a19d11d4a6d00051fa8d76c639, type: 3}
@@ -137,6 +137,10 @@ Material:
         first:
           name: _Shininess
         second: 1
+      data:
+        first:
+          name: _WaveScale
+        second: .150000006
       data:
         first:
           name: _Parallax
@@ -173,10 +177,6 @@ Material:
         first:
           name: _Metallic
         second: 0
-      data:
-        first:
-          name: _WaveScale
-        second: .0729999989
       data:
         first:
           name: _Highlight
@@ -224,20 +224,20 @@ Material:
         second: {r: 1, g: 1, b: 0, a: 0}
       data:
         first:
-          name: _BumpMap_ST
-        second: {r: 1, g: 1, b: 0, a: 0}
-      data:
-        first:
-          name: WaveSpeed
-        second: {r: 9.68770027, g: 4.81898165, b: -7.91322803, a: 2.87029743}
-      data:
-        first:
           name: _horizonColor
         second: {r: .309803933, g: .686274529, b: .776470661, a: 0}
       data:
         first:
           name: _ColorControl_ST
         second: {r: 1, g: 1, b: 0, a: 0}
+      data:
+        first:
+          name: _BumpMap_ST
+        second: {r: 1, g: 1, b: 0, a: 0}
+      data:
+        first:
+          name: WaveSpeed
+        second: {r: 9.68770027, g: 4.81898165, b: -7.91322803, a: 2.87029743}
       data:
         first:
           name: _ColorControlCube_ST

@@ -29,7 +29,7 @@ public void Start()
             i++;
         }
 
-        Material mat = Resources.Load("dirt1") as Material;
+        Material mat = Resources.Load("dirt") as Material;
         //renderer.material = mat;
         transform.GetComponent<MeshFilter>().mesh = new Mesh();
         transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine);

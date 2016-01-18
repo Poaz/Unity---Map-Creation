@@ -38,7 +38,7 @@ public class Water : Singleton<Water> {
         transform.GetComponent<MeshFilter>().mesh = new Mesh();
         transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
         gameObject.GetComponent<Renderer>().material = mat;
-        MeshCollider collider = transform.gameObject.AddComponent<MeshCollider>();
+        //MeshCollider collider = transform.gameObject.AddComponent<MeshCollider>();
         //collider.size = new Vector3(1, 5, 1);
         //transform.gameObject.AddComponent<BoxCollider>();
 

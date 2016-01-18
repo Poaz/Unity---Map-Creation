@@ -10,10 +10,11 @@ using System.Collections;
 [RequireComponent(typeof(MeshRenderer))]
 //[RequireComponent(typeof(BoxCollider))]
 public class Grass : Singleton<Grass> {
-	
-//private Texture whatevercolor = Resources.Load("grassland2.jpg") as Texture;
- 
-public void Start()
+
+    //private Texture whatevercolor = Resources.Load("grassland2.jpg") as Texture;
+
+
+    public void Start()
 {
         //yield return new WaitForSeconds(3f);
 
@@ -37,7 +38,6 @@ public void Start()
         transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
         transform.GetComponent<MeshFilter>().mesh.Optimize();
         transform.GetComponent<Renderer>().material = mat;
-        
         gameObject.AddComponent<MeshCollider>();
         transform.gameObject.SetActive(true);
         this.gameObject.isStatic = true;
